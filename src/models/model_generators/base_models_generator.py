@@ -3,6 +3,8 @@ from typing import Any
 
 
 class BaseModelGenerator(ABC):
+    schemas: dict[str, dict]
+
     def __init__(self, schemas: dict[str, dict]) -> None:
         self.schemas = schemas
 
