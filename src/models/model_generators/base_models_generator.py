@@ -12,8 +12,15 @@ class BaseModelGenerator(ABC):
         pass
 
     @staticmethod
-    def format_name(name: str) -> str:
-        return name.replace("_", " ").replace("-", " ").title().replace(" ", "")
+    def capitalize(string: str) -> str:
+        if string:
+            return string[0].upper() + string[1:]
+        return ""
+
+    @classmethod
+    def format_name(cls, name: str) -> str:
+        name = name.replace("_", " ").replace("-", " ")
+        return "".join(cls.capitalize(part) for part in name.split(" "))
 
     def generate_models(self) -> str:
         models = ""
