@@ -6,8 +6,8 @@ class BaseModelGenerator(ABC):
     def __init__(self, schemas: dict[str, dict]) -> None:
         self.schemas = schemas
 
-    @abstractmethod
     @classmethod
+    @abstractmethod
     def generate_model(cls, name: str, schema: dict[str, Any]) -> str:
         pass
 

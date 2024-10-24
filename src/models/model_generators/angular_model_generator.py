@@ -14,22 +14,25 @@ class AngularModelGenerator(BaseModelGenerator):
             case "object":
                 return "any"
             case "array":
-                default = {"default": ""} if default else {}
-                # return f"{cls.get_property_type(property=property, data={**data.get("items", {}), **default})}[]"
+                result = cls.get_property_type(data["items"].get("type"), data["items"])
+                return " | ".join(f"{item}[]" for item in result.split(" | "))
+            case "boolean":
+                return "boolean"
+            case "null":
+                return "null"
+            case "integer" | "number":
+                return "number"
             case None:
+                anyOf = data.get("anyOf", [])
+                if anyOf:
+                    return " | ".join((cls.get_property_type(option.get("type"), option) for option in anyOf))
                 ref = data.get("$ref")
-                if "anyOf":
-
                 if ref:
                     return ref.split("/")[-1]
                 else:
                     raise ValueError(f"Not implemented way of handling data: {data}")
-            case "boolean":
-                return "boolean"
             case _:
                 raise ValueError(f"Type {data.get("type")} not yet implemented")
- 
-        return ""
 
     @classmethod
     def get_property_line(cls, property: str, data: dict[str, Any]) -> str:

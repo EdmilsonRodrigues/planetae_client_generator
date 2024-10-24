@@ -3,7 +3,7 @@
     "info": {
         "title": "x3",
         "description": "API for the x3 application (development environment)",
-        "version": "1.1.1"
+        "version": "1.2.0"
     },
     "paths": {
         "/api/client/admin/persons/": {
@@ -138,7 +138,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/Person-Input",
+                                "$ref": "#/components/schemas/Person",
                                 "description": "The person to create. Do not include id nor _id"
                             }
                         }
@@ -150,7 +150,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Person-Output"
+                                    "$ref": "#/components/schemas/Person"
                                 }
                             }
                         }
@@ -202,7 +202,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Person-Output"
+                                    "$ref": "#/components/schemas/Person"
                                 }
                             }
                         }
@@ -251,7 +251,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/Person-Input"
+                                "$ref": "#/components/schemas/Person"
                             }
                         }
                     }
@@ -3714,7 +3714,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/Content",
+                                "$ref": "#/components/schemas/ContentRequest",
                                 "description": "The content to be created. Do not insert the id nor _id nor owner"
                             }
                         }
@@ -5452,7 +5452,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Person-Output"
+                                    "$ref": "#/components/schemas/Person"
                                 }
                             }
                         }
@@ -5477,7 +5477,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Person-Output"
+                                    "$ref": "#/components/schemas/Person"
                                 }
                             }
                         }
@@ -5514,7 +5514,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Person-Output"
+                                    "$ref": "#/components/schemas/Person"
                                 }
                             }
                         }
@@ -5566,7 +5566,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Person-Output"
+                                    "$ref": "#/components/schemas/Person"
                                 }
                             }
                         }
@@ -5606,56 +5606,40 @@
         "schemas": {
             "AccountMemberInvite": {
                 "properties": {
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Createdat"
+                    },
                     "updatedAt": {
                         "type": "string",
                         "format": "date-time",
-                        "title": "Updatedat",
-                        "default": "2024-10-23T20:01:54.524285Z"
+                        "title": "Updatedat"
                     },
                     "_id": {
                         "type": "string",
-                        "title": " Id"
+                        "title": " Id",
+                        "default": "671a7e9204946d56c0ed0e35"
                     },
                     "accountId": {
-                        "anyOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Accountid",
-                        "default": ""
+                        "type": "string",
+                        "maxLength": 24,
+                        "minLength": 24,
+                        "title": "Accountid"
                     },
                     "subscriptionId": {
-                        "anyOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Subscriptionid",
-                        "default": ""
+                        "type": "string",
+                        "maxLength": 24,
+                        "minLength": 24,
+                        "title": "Subscriptionid"
                     },
                     "name": {
                         "type": "string",
-                        "title": "Name",
-                        "default": ""
+                        "title": "Name"
                     },
                     "username": {
-                        "anyOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Username",
-                        "default": ""
+                        "type": "string",
+                        "title": "Username"
                     },
                     "firstName": {
                         "type": "string",
@@ -5669,13 +5653,12 @@
                     },
                     "email": {
                         "type": "string",
-                        "title": "Email",
-                        "default": ""
+                        "format": "email",
+                        "title": "Email"
                     },
                     "role": {
-                        "type": "string",
-                        "title": "Role",
-                        "default": "member"
+                        "$ref": "#/components/schemas/UserRoles",
+                        "default": "user"
                     },
                     "seats": {
                         "type": "integer",
@@ -5692,28 +5675,24 @@
                         "title": "Accountstagelabel",
                         "default": ""
                     },
-                    "createdAt": {
-                        "type": "string",
-                        "format": "date-time",
-                        "title": "Createdat",
-                        "default": "2024-10-23T20:01:54.524285Z"
-                    },
                     "createdBy": {
-                        "anyOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Createdby",
-                        "default": ""
+                        "type": "string",
+                        "maxLength": 24,
+                        "minLength": 24,
+                        "title": "Createdby"
                     }
                 },
                 "type": "object",
+                "required": [
+                    "accountId",
+                    "subscriptionId",
+                    "name",
+                    "username",
+                    "email",
+                    "createdBy"
+                ],
                 "title": "AccountMemberInvite",
-                "description": "Represents an invitation sent to a user to join an account as a member.\n\nAttributes:\n    id (PyObjectId): The unique identifier for the invitation.\n    accountId (str, optional): The ID of the account associated with the invitation.\n    subscriptionId (str, optional): The ID of the subscription associated with the invitation.\n    name (str): The name of the invitee.\n    username (str, optional): The username of the invitee.\n    firstName (str): The first name of the invitee.\n    lastName (str): The last name of the invitee.\n    email (str): The email address of the invitee.\n    role (str): The role assigned to the invitee (default: \"member\").\n    createdAt (datetime): The date and time when the invitation was created.\n    createdBy (str, optional): The user who created the invitation.\n    updatedAt (datetime): The date and time when the invitation was last updated.\n\nMethods:\n    is_valid_email: Checks if the email address is valid."
+                "description": "    Represents an invitation sent to a user to join an account as a member.\n\n    Attributes:\n        id (PyObjectId): The unique identifier for the invitation.\n        accountId (str, optional): The ID of the account associated with the invitation.\n        subscriptionId (str, optional): The ID of the subscription associated with the invitation.\n        name (str): The name of the invitee.\n        username (str, optional): The username of the invitee.\n        firstName (str): The first name of the invitee.\n        lastName (str): The last name of the invitee.\n        email (str): The email address of the invitee.\n    role (str): The role assigned to the invitee (default: \"member\").\n    createdAt (datetime): The date and time when the invitation was created.\n    createdBy (str, optional): The user who created the invitation.\n    updatedAt (datetime): The date and time when the invitation was last updated.\n\nMethods:\n    is_valid_email: Checks if the email address is valid."
             },
             "ActionModel": {
                 "properties": {
@@ -5917,7 +5896,7 @@
                         "description": "The id of the task."
                     },
                     "metadata": {
-                        "$ref": "#/components/schemas/Metadata",
+                        "$ref": "#/components/schemas/VideoRequest",
                         "description": "The metadata of the video."
                     }
                 },
@@ -6190,36 +6169,65 @@
             },
             "Content": {
                 "properties": {
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Createdat"
+                    },
                     "updatedAt": {
                         "type": "string",
                         "format": "date-time",
-                        "title": "Updatedat",
-                        "default": "2024-10-23T20:01:54.541556Z"
-                    },
-                    "_id": {
-                        "type": "string",
-                        "title": " Id",
-                        "default": "67194822bc05a0a474c246be"
+                        "title": "Updatedat"
                     },
                     "title": {
                         "type": "string",
-                        "title": "Title",
-                        "default": ""
+                        "title": "Title"
                     },
                     "type": {
-                        "type": "string",
-                        "title": "Type",
-                        "default": ""
+                        "$ref": "#/components/schemas/ContentTypes"
                     },
                     "modelName": {
                         "type": "string",
-                        "title": "Modelname",
-                        "default": ""
+                        "title": "Modelname"
                     },
                     "description": {
                         "type": "string",
                         "title": "Description",
                         "default": ""
+                    },
+                    "urls": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Urls",
+                        "default": []
+                    },
+                    "detectionStrings": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Detectionstrings",
+                        "default": []
+                    },
+                    "_id": {
+                        "type": "string",
+                        "title": " Id",
+                        "default": "671a7e9204946d56c0ed0e35"
+                    },
+                    "face_id": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "maxLength": 24,
+                                "minLength": 24
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Face Id"
                     },
                     "metadata": {
                         "type": "object",
@@ -6228,18 +6236,9 @@
                     },
                     "owner": {
                         "type": "string",
-                        "title": "Owner",
-                        "default": ""
-                    },
-                    "owner_email": {
-                        "type": "string",
-                        "title": "Owner Email",
-                        "default": ""
-                    },
-                    "owner_name": {
-                        "type": "string",
-                        "title": "Owner Name",
-                        "default": ""
+                        "maxLength": 24,
+                        "minLength": 24,
+                        "title": "Owner"
                     },
                     "accountId": {
                         "type": "string",
@@ -6251,39 +6250,16 @@
                         "title": "Imagepreview",
                         "default": ""
                     },
-                    "urls": {
-                        "items": {
-                            "type": "string"
-                        },
-                        "type": "array",
-                        "title": "Urls",
-                        "default": []
-                    },
-                    "tags": {
-                        "items": {
-                            "type": "string"
-                        },
-                        "type": "array",
-                        "title": "Tags",
-                        "default": []
-                    },
                     "infringementPreferences": {
                         "$ref": "#/components/schemas/InfringementPreferences",
                         "default": {
-                            "updatedAt": "2024-10-23T20:01:54.541556Z",
+                            "createdAt": "2024-10-24T18:06:26.083755Z",
+                            "updatedAt": "2024-10-24T18:06:26.083755Z",
                             "receiveEmailOnDetection": false,
                             "automaticApproveInfringements": false,
                             "receiveEmailOnTakedown": false,
                             "sendTakedownRequests": false
                         }
-                    },
-                    "detectionStrings": {
-                        "items": {
-                            "type": "string"
-                        },
-                        "type": "array",
-                        "title": "Detectionstrings",
-                        "default": []
                     },
                     "allowedDomains": {
                         "items": {
@@ -6305,32 +6281,83 @@
                         "type": "boolean",
                         "title": "Is Verified",
                         "default": false
-                    },
-                    "createdAt": {
-                        "type": "string",
-                        "format": "date-time",
-                        "title": "Createdat",
-                        "default": "2024-10-23T20:01:54.541556Z"
-                    },
-                    "country": {
-                        "type": "string",
-                        "title": "Country",
-                        "default": ""
-                    },
-                    "company": {
-                        "type": "string",
-                        "title": "Company",
-                        "default": ""
-                    },
-                    "signature": {
-                        "type": "string",
-                        "title": "Signature",
-                        "default": ""
                     }
                 },
                 "type": "object",
+                "required": [
+                    "title",
+                    "type",
+                    "modelName",
+                    "owner"
+                ],
                 "title": "Content",
                 "description": "Represents a piece of content.\n\nAttributes:\n    id (PyObjectId): The unique identifier for the content.\n    title (str): The title of the content.\n    type (str): The type of the content.\n    description (str): The description of the content.\n    metadata (Dict[str, Any]): Additional metadata associated with the content.\n    owner (str): The owner of the content.\n    imagePreview (Optional[str]): The URL of the image preview for the content.\n    url (Optional[str]): The URL of the content.\n    tags (List[str]): The tags associated with the content.\n    infringementPreferences (InfringementPreferences): The infringement preferences for the content.\n    detectionStrings (List[str]): The detection strings for the content.\n    allowedDomains (List[str]): The allowed domains for the content.\n    files (List[str]): The files associated with the content.\n    is_verified (bool): Indicates whether the content is verified.\n    updatedAt (datetime): The date and time when the content was last updated.\n    createdAt (datetime): The date and time when the content was created."
+            },
+            "ContentRequest": {
+                "properties": {
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Createdat"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Updatedat"
+                    },
+                    "title": {
+                        "type": "string",
+                        "title": "Title"
+                    },
+                    "type": {
+                        "$ref": "#/components/schemas/ContentTypes"
+                    },
+                    "modelName": {
+                        "type": "string",
+                        "title": "Modelname"
+                    },
+                    "description": {
+                        "type": "string",
+                        "title": "Description",
+                        "default": ""
+                    },
+                    "urls": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Urls",
+                        "default": []
+                    },
+                    "detectionStrings": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Detectionstrings",
+                        "default": []
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "title",
+                    "type",
+                    "modelName"
+                ],
+                "title": "ContentRequest"
+            },
+            "ContentTypes": {
+                "type": "string",
+                "enum": [
+                    "image",
+                    "video",
+                    "audio",
+                    "face",
+                    "text",
+                    "document",
+                    "other"
+                ],
+                "title": "ContentTypes"
             },
             "Credentials": {
                 "properties": {
@@ -6349,6 +6376,34 @@
                     "password"
                 ],
                 "title": "Credentials"
+            },
+            "DiskComponent": {
+                "properties": {
+                    "total": {
+                        "type": "integer",
+                        "title": "Total"
+                    },
+                    "used": {
+                        "type": "integer",
+                        "title": "Used"
+                    },
+                    "free": {
+                        "type": "integer",
+                        "title": "Free"
+                    },
+                    "percent": {
+                        "type": "number",
+                        "title": "Percent"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "total",
+                    "used",
+                    "free",
+                    "percent"
+                ],
+                "title": "DiskComponent"
             },
             "HTTPValidationError": {
                 "properties": {
@@ -6439,6 +6494,11 @@
             },
             "Infrastructure": {
                 "properties": {
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Createdat"
+                    },
                     "updatedAt": {
                         "type": "string",
                         "format": "date-time",
@@ -6447,37 +6507,25 @@
                     "_id": {
                         "type": "string",
                         "title": " Id",
-                        "default": "67194822bc05a0a474c246be"
-                    },
-                    "username": {
-                        "type": "string",
-                        "title": "Username",
-                        "default": ""
+                        "default": "671a7e9204946d56c0ed0e35"
                     },
                     "vps": {
                         "type": "string",
-                        "title": "Vps",
-                        "default": ""
+                        "title": "Vps"
                     },
                     "ip": {
                         "type": "string",
-                        "title": "Ip",
-                        "default": ""
+                        "title": "Ip"
                     },
                     "cpu": {
                         "type": "integer",
-                        "title": "Cpu",
-                        "default": 0
+                        "title": "Cpu"
                     },
                     "ram": {
-                        "type": "object",
-                        "title": "Ram",
-                        "default": {}
+                        "$ref": "#/components/schemas/MemoryComponent"
                     },
                     "disk": {
-                        "type": "object",
-                        "title": "Disk",
-                        "default": {}
+                        "$ref": "#/components/schemas/DiskComponent"
                     },
                     "gpu": {
                         "items": {
@@ -6495,24 +6543,30 @@
                         "title": "Components",
                         "default": []
                     },
-                    "createdAt": {
-                        "type": "string",
-                        "format": "date-time",
-                        "title": "Createdat",
-                        "default": "2024-10-23T20:01:54.528559Z"
-                    },
                     "last_checkin": {
                         "type": "string",
                         "format": "date-time",
                         "title": "Last Checkin",
-                        "default": "2024-10-23T20:01:54.528559Z"
+                        "default": "2024-10-24T18:06:26.903830Z"
                     }
                 },
                 "type": "object",
+                "required": [
+                    "vps",
+                    "ip",
+                    "cpu",
+                    "ram",
+                    "disk"
+                ],
                 "title": "Infrastructure"
             },
             "InfrastructureComponent": {
                 "properties": {
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Createdat"
+                    },
                     "updatedAt": {
                         "type": "string",
                         "format": "date-time",
@@ -6520,7 +6574,8 @@
                     },
                     "_id": {
                         "type": "string",
-                        "title": " Id"
+                        "title": " Id",
+                        "default": "671a7e9204946d56c0ed0e35"
                     },
                     "type": {
                         "type": "string",
@@ -6550,50 +6605,25 @@
             },
             "Infringement": {
                 "properties": {
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Createdat"
+                    },
                     "updatedAt": {
                         "type": "string",
                         "format": "date-time",
-                        "title": "Updatedat",
-                        "default": "2024-10-23T20:01:54.503185Z"
+                        "title": "Updatedat"
                     },
                     "_id": {
                         "type": "string",
                         "title": " Id",
-                        "default": "67194822bc05a0a474c246be"
-                    },
-                    "contentId": {
-                        "type": "string",
-                        "title": "Contentid",
-                        "default": ""
-                    },
-                    "source": {
-                        "type": "string",
-                        "title": "Source",
-                        "default": ""
-                    },
-                    "personId": {
-                        "type": "string",
-                        "title": "Personid",
-                        "default": ""
-                    },
-                    "timestamp": {
-                        "type": "string",
-                        "format": "date-time",
-                        "title": "Timestamp",
-                        "default": "2024-10-23T20:01:54.503185Z"
+                        "default": "671a7e9204946d56c0ed0e35"
                     },
                     "details": {
                         "type": "object",
                         "title": "Details",
-                        "default": {
-                            "takedown_status": "verified"
-                        }
-                    },
-                    "createdAt": {
-                        "type": "string",
-                        "format": "date-time",
-                        "title": "Createdat",
-                        "default": "2024-10-23T20:01:54.503185Z"
+                        "default": {}
                     },
                     "readAt": {
                         "anyOf": [
@@ -6605,13 +6635,7 @@
                                 "type": "null"
                             }
                         ],
-                        "title": "Readat",
-                        "default": "2024-10-23T20:01:54.503185Z"
-                    },
-                    "owner": {
-                        "type": "string",
-                        "title": "Owner",
-                        "default": ""
+                        "title": "Readat"
                     },
                     "lastUpdateRead": {
                         "type": "boolean",
@@ -6624,6 +6648,11 @@
             },
             "InfringementPreferences": {
                 "properties": {
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Createdat"
+                    },
                     "updatedAt": {
                         "type": "string",
                         "format": "date-time",
@@ -6661,7 +6690,431 @@
                 ],
                 "title": "Level"
             },
-            "Metadata": {
+            "MemoryComponent": {
+                "properties": {
+                    "available": {
+                        "type": "integer",
+                        "title": "Available"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "title": "Total"
+                    },
+                    "used": {
+                        "type": "integer",
+                        "title": "Used"
+                    },
+                    "free": {
+                        "type": "integer",
+                        "title": "Free"
+                    },
+                    "percent": {
+                        "type": "number",
+                        "title": "Percent"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "available",
+                    "total",
+                    "used",
+                    "free",
+                    "percent"
+                ],
+                "title": "MemoryComponent"
+            },
+            "NotificationPreferences": {
+                "properties": {
+                    "receiveNewsletter": {
+                        "type": "boolean",
+                        "title": "Receivenewsletter",
+                        "default": false
+                    },
+                    "receivePromotions": {
+                        "type": "boolean",
+                        "title": "Receivepromotions",
+                        "default": false
+                    }
+                },
+                "type": "object",
+                "title": "NotificationPreferences"
+            },
+            "OutsetaLoginResponse": {
+                "properties": {
+                    "access_token": {
+                        "type": "string",
+                        "title": "Access Token"
+                    },
+                    "token_type": {
+                        "type": "string",
+                        "title": "Token Type"
+                    },
+                    "expires_in": {
+                        "type": "integer",
+                        "title": "Expires In"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "access_token",
+                    "token_type",
+                    "expires_in"
+                ],
+                "title": "OutsetaLoginResponse"
+            },
+            "PendingTasks": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "title": "Id"
+                    },
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Type"
+                    },
+                    "lastRun": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "format": "date-time"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Lastrun"
+                    },
+                    "errors": {
+                        "type": "integer",
+                        "title": "Errors"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "name",
+                    "type",
+                    "lastRun",
+                    "errors"
+                ],
+                "title": "PendingTasks"
+            },
+            "Person": {
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "title": "Username",
+                        "description": "The username of the person."
+                    },
+                    "name": {
+                        "type": "string",
+                        "title": "Name",
+                        "description": "The name of the person."
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "title": "Email",
+                        "description": "The email of the person."
+                    },
+                    "role": {
+                        "$ref": "#/components/schemas/UserRoles",
+                        "description": "The role of the person."
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Createdat"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Updatedat"
+                    },
+                    "_id": {
+                        "type": "string",
+                        "title": " Id",
+                        "default": "671a7e9204946d56c0ed0e35"
+                    },
+                    "accountId": {
+                        "type": "string",
+                        "title": "Accountid",
+                        "default": ""
+                    },
+                    "accountStageLabel": {
+                        "type": "string",
+                        "title": "Accountstagelabel",
+                        "default": ""
+                    },
+                    "subscriptionId": {
+                        "type": "string",
+                        "title": "Subscriptionid",
+                        "default": ""
+                    },
+                    "infringementPreferences": {
+                        "$ref": "#/components/schemas/InfringementPreferences",
+                        "default": {
+                            "createdAt": "2024-10-24T18:06:26.145750Z",
+                            "updatedAt": "2024-10-24T18:06:26.145750Z",
+                            "receiveEmailOnDetection": false,
+                            "automaticApproveInfringements": false,
+                            "receiveEmailOnTakedown": false,
+                            "sendTakedownRequests": false
+                        }
+                    },
+                    "notificationPreferences": {
+                        "$ref": "#/components/schemas/NotificationPreferences",
+                        "default": {
+                            "receiveNewsletter": false,
+                            "receivePromotions": false
+                        }
+                    },
+                    "allowedDomains": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Alloweddomains",
+                        "default": []
+                    },
+                    "createdBy": {
+                        "type": "string",
+                        "title": "Createdby",
+                        "default": ""
+                    },
+                    "owner": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "maxLength": 24,
+                                "minLength": 24
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Owner"
+                    },
+                    "seats": {
+                        "type": "integer",
+                        "title": "Seats",
+                        "default": 1
+                    },
+                    "plan_type": {
+                        "type": "string",
+                        "title": "Plan Type",
+                        "default": ""
+                    },
+                    "profileImg": {
+                        "type": "string",
+                        "title": "Profileimg",
+                        "default": ""
+                    },
+                    "signature": {
+                        "type": "string",
+                        "title": "Signature",
+                        "default": ""
+                    },
+                    "country": {
+                        "type": "string",
+                        "title": "Country",
+                        "default": ""
+                    },
+                    "company": {
+                        "type": "string",
+                        "title": "Company",
+                        "default": ""
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "username",
+                    "name",
+                    "email",
+                    "role"
+                ],
+                "title": "Person"
+            },
+            "Subscription": {
+                "properties": {
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Createdat"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Updatedat"
+                    },
+                    "_id": {
+                        "type": "string",
+                        "title": " Id",
+                        "default": "671a7e9204946d56c0ed0e35"
+                    },
+                    "personId": {
+                        "type": "string",
+                        "maxLength": 24,
+                        "minLength": 24,
+                        "title": "Personid"
+                    },
+                    "planId": {
+                        "type": "string",
+                        "maxLength": 24,
+                        "minLength": 24,
+                        "title": "Planid"
+                    },
+                    "startDate": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Startdate",
+                        "default": "2024-10-24T18:06:26.118372Z"
+                    },
+                    "endDate": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "format": "date-time"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Enddate"
+                    },
+                    "status": {
+                        "type": "string",
+                        "title": "Status",
+                        "default": ""
+                    },
+                    "scription_id": {
+                        "type": "string",
+                        "title": "Scription Id",
+                        "default": ""
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "personId",
+                    "planId"
+                ],
+                "title": "Subscription",
+                "description": "Represents a subscription for a person to a specific plan.\n\nAttributes:\n    id (PyObjectId): The unique identifier for the subscription.\n    personId (str): The ID of the person associated with the subscription.\n    planId (str): The ID of the plan associated with the subscription.\n    startDate (datetime): The start date of the subscription.\n    endDate (Optional[datetime]): The end date of the subscription.\n    status (str): The status of the subscription.\n    scription_id (str): The ID of the subscription.\n\nMethods:\n    get_plan(db): Retrieves the plan associated with the subscription from the database.\n    get_plan_id(db): Retrieves the plan associated with the subscription using the plan ID from the database."
+            },
+            "UpdateSubscriptionData": {
+                "properties": {
+                    "seats": {
+                        "type": "integer",
+                        "title": "Seats"
+                    },
+                    "plan_type": {
+                        "type": "string",
+                        "title": "Plan Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "seats",
+                    "plan_type"
+                ],
+                "title": "UpdateSubscriptionData"
+            },
+            "UserRoles": {
+                "type": "string",
+                "enum": [
+                    "superadmin",
+                    "account-admin",
+                    "account-manager",
+                    "user"
+                ],
+                "title": "UserRoles"
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            },
+            "VideoFaceScrappingRequest": {
+                "properties": {
+                    "task_id": {
+                        "type": "string",
+                        "maxLength": 24,
+                        "minLength": 24,
+                        "title": "Task Id",
+                        "description": "The id of the task."
+                    },
+                    "video_id": {
+                        "type": "string",
+                        "maxLength": 24,
+                        "minLength": 24,
+                        "title": "Video Id",
+                        "description": "The ID of the video."
+                    },
+                    "video_frame_rate": {
+                        "type": "integer",
+                        "title": "Video Frame Rate",
+                        "description": "The frame rate of the video."
+                    },
+                    "faces": {
+                        "items": {
+                            "$ref": "#/components/schemas/VideoScrappedFace"
+                        },
+                        "type": "array",
+                        "title": "Faces",
+                        "description": "The faces scrapped and the frames they are on."
+                    },
+                    "frame_images": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Frame Images",
+                        "description": "The base64 encoded images of the frames."
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "task_id",
+                    "video_id",
+                    "video_frame_rate",
+                    "faces",
+                    "frame_images"
+                ],
+                "title": "VideoFaceScrappingRequest"
+            },
+            "VideoRequest": {
                 "properties": {
                     "url": {
                         "anyOf": [
@@ -6844,630 +7297,10 @@
                             }
                         ],
                         "title": "Video Length"
-                    },
-                    "task_id": {
-                        "anyOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Task Id"
-                    },
-                    "created_date": {
-                        "type": "string",
-                        "format": "date-time",
-                        "title": "Created Date",
-                        "default": "2024-10-23T20:01:54.489106"
-                    },
-                    "frame_rate": {
-                        "anyOf": [
-                            {
-                                "type": "integer"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Frame Rate"
                     }
                 },
                 "type": "object",
-                "title": "Metadata"
-            },
-            "Notification": {
-                "properties": {
-                    "updatedAt": {
-                        "type": "string",
-                        "format": "date-time",
-                        "title": "Updatedat"
-                    },
-                    "_id": {
-                        "type": "string",
-                        "title": " Id",
-                        "default": "67194822bc05a0a474c246be"
-                    },
-                    "personId": {
-                        "type": "string",
-                        "maxLength": 24,
-                        "minLength": 24,
-                        "title": "Personid"
-                    },
-                    "title": {
-                        "type": "string",
-                        "title": "Title"
-                    },
-                    "description": {
-                        "type": "string",
-                        "title": "Description"
-                    },
-                    "seen": {
-                        "type": "boolean",
-                        "title": "Seen",
-                        "default": false
-                    },
-                    "createdAt": {
-                        "type": "string",
-                        "format": "date-time",
-                        "title": "Createdat",
-                        "default": "2024-10-23T20:01:54.507186Z"
-                    }
-                },
-                "type": "object",
-                "required": [
-                    "personId",
-                    "title",
-                    "description"
-                ],
-                "title": "Notification"
-            },
-            "NotificationPreferences": {
-                "properties": {
-                    "updatedAt": {
-                        "type": "string",
-                        "format": "date-time",
-                        "title": "Updatedat"
-                    },
-                    "receiveNewsletter": {
-                        "type": "boolean",
-                        "title": "Receivenewsletter",
-                        "default": false
-                    },
-                    "receivePromotions": {
-                        "type": "boolean",
-                        "title": "Receivepromotions",
-                        "default": false
-                    }
-                },
-                "type": "object",
-                "title": "NotificationPreferences"
-            },
-            "OutsetaLoginResponse": {
-                "properties": {
-                    "access_token": {
-                        "type": "string",
-                        "title": "Access Token"
-                    },
-                    "token_type": {
-                        "type": "string",
-                        "title": "Token Type"
-                    },
-                    "expires_in": {
-                        "type": "integer",
-                        "title": "Expires In"
-                    }
-                },
-                "type": "object",
-                "required": [
-                    "access_token",
-                    "token_type",
-                    "expires_in"
-                ],
-                "title": "OutsetaLoginResponse"
-            },
-            "PendingTasks": {
-                "properties": {
-                    "id": {
-                        "type": "integer",
-                        "title": "Id"
-                    },
-                    "name": {
-                        "type": "string",
-                        "title": "Name"
-                    },
-                    "type": {
-                        "type": "string",
-                        "title": "Type"
-                    },
-                    "lastRun": {
-                        "anyOf": [
-                            {
-                                "type": "string",
-                                "format": "date-time"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Lastrun"
-                    },
-                    "errors": {
-                        "type": "integer",
-                        "title": "Errors"
-                    }
-                },
-                "type": "object",
-                "required": [
-                    "id",
-                    "name",
-                    "type",
-                    "lastRun",
-                    "errors"
-                ],
-                "title": "PendingTasks"
-            },
-            "Person-Input": {
-                "properties": {
-                    "updatedAt": {
-                        "type": "string",
-                        "format": "date-time",
-                        "title": "Updatedat"
-                    },
-                    "_id": {
-                        "type": "string",
-                        "title": " Id",
-                        "default": "67194822bc05a0a474c246be"
-                    },
-                    "username": {
-                        "type": "string",
-                        "title": "Username",
-                        "default": ""
-                    },
-                    "name": {
-                        "type": "string",
-                        "title": "Name",
-                        "default": ""
-                    },
-                    "email": {
-                        "type": "string",
-                        "title": "Email",
-                        "default": ""
-                    },
-                    "accountId": {
-                        "type": "string",
-                        "title": "Accountid",
-                        "default": ""
-                    },
-                    "accountStageLabel": {
-                        "type": "string",
-                        "title": "Accountstagelabel",
-                        "default": ""
-                    },
-                    "subscriptionId": {
-                        "type": "string",
-                        "title": "Subscriptionid",
-                        "default": ""
-                    },
-                    "role": {
-                        "type": "string",
-                        "title": "Role",
-                        "default": ""
-                    },
-                    "infringementPreferences": {
-                        "$ref": "#/components/schemas/InfringementPreferences",
-                        "default": {
-                            "updatedAt": "2024-10-23T20:01:54.549574Z",
-                            "receiveEmailOnDetection": false,
-                            "automaticApproveInfringements": false,
-                            "receiveEmailOnTakedown": false,
-                            "sendTakedownRequests": false
-                        }
-                    },
-                    "notificationPreferences": {
-                        "$ref": "#/components/schemas/NotificationPreferences",
-                        "default": {
-                            "updatedAt": "2024-10-23T20:01:54.549574Z",
-                            "receiveNewsletter": false,
-                            "receivePromotions": false
-                        }
-                    },
-                    "subscription": {
-                        "anyOf": [
-                            {
-                                "$ref": "#/components/schemas/Subscription"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ]
-                    },
-                    "allowedDomains": {
-                        "items": {
-                            "type": "string"
-                        },
-                        "type": "array",
-                        "title": "Alloweddomains",
-                        "default": []
-                    },
-                    "contents": {
-                        "items": {
-                            "$ref": "#/components/schemas/Content"
-                        },
-                        "type": "array",
-                        "title": "Contents",
-                        "default": []
-                    },
-                    "createdBy": {
-                        "type": "string",
-                        "title": "Createdby",
-                        "default": ""
-                    },
-                    "owner": {
-                        "type": "string",
-                        "title": "Owner",
-                        "default": ""
-                    },
-                    "num_contents": {
-                        "type": "integer",
-                        "title": "Num Contents",
-                        "default": 0
-                    },
-                    "notifications": {
-                        "items": {
-                            "$ref": "#/components/schemas/Notification"
-                        },
-                        "type": "array",
-                        "title": "Notifications",
-                        "default": []
-                    },
-                    "count_infringements": {
-                        "additionalProperties": {
-                            "type": "integer"
-                        },
-                        "type": "object",
-                        "title": "Count Infringements",
-                        "default": {
-                            "potential_infringements": 0,
-                            "verified_infringements": 0,
-                            "takedown_pending": 0,
-                            "takedown_successful": 0,
-                            "non_infringements": 0
-                        }
-                    },
-                    "seats": {
-                        "type": "integer",
-                        "title": "Seats",
-                        "default": 1
-                    },
-                    "plan_type": {
-                        "type": "string",
-                        "title": "Plan Type",
-                        "default": ""
-                    },
-                    "profileImg": {
-                        "type": "string",
-                        "title": "Profileimg",
-                        "default": ""
-                    },
-                    "signature": {
-                        "type": "string",
-                        "title": "Signature",
-                        "default": ""
-                    }
-                },
-                "type": "object",
-                "title": "Person"
-            },
-            "Person-Output": {
-                "properties": {
-                    "updatedAt": {
-                        "type": "string",
-                        "format": "date-time",
-                        "title": "Updatedat"
-                    },
-                    "_id": {
-                        "type": "string",
-                        "title": " Id",
-                        "default": "67194822bc05a0a474c246be"
-                    },
-                    "username": {
-                        "type": "string",
-                        "title": "Username",
-                        "default": ""
-                    },
-                    "name": {
-                        "type": "string",
-                        "title": "Name",
-                        "default": ""
-                    },
-                    "email": {
-                        "type": "string",
-                        "title": "Email",
-                        "default": ""
-                    },
-                    "accountId": {
-                        "type": "string",
-                        "title": "Accountid",
-                        "default": ""
-                    },
-                    "accountStageLabel": {
-                        "type": "string",
-                        "title": "Accountstagelabel",
-                        "default": ""
-                    },
-                    "subscriptionId": {
-                        "type": "string",
-                        "title": "Subscriptionid",
-                        "default": ""
-                    },
-                    "role": {
-                        "type": "string",
-                        "title": "Role",
-                        "default": ""
-                    },
-                    "infringementPreferences": {
-                        "$ref": "#/components/schemas/InfringementPreferences",
-                        "default": {
-                            "updatedAt": "2024-10-23T20:01:54.549574Z",
-                            "receiveEmailOnDetection": false,
-                            "automaticApproveInfringements": false,
-                            "receiveEmailOnTakedown": false,
-                            "sendTakedownRequests": false
-                        }
-                    },
-                    "notificationPreferences": {
-                        "$ref": "#/components/schemas/NotificationPreferences",
-                        "default": {
-                            "updatedAt": "2024-10-23T20:01:54.549574Z",
-                            "receiveNewsletter": false,
-                            "receivePromotions": false
-                        }
-                    },
-                    "subscription": {
-                        "anyOf": [
-                            {
-                                "$ref": "#/components/schemas/Subscription"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ]
-                    },
-                    "allowedDomains": {
-                        "items": {
-                            "type": "string"
-                        },
-                        "type": "array",
-                        "title": "Alloweddomains",
-                        "default": []
-                    },
-                    "contents": {
-                        "items": {
-                            "$ref": "#/components/schemas/Content"
-                        },
-                        "type": "array",
-                        "title": "Contents",
-                        "default": []
-                    },
-                    "createdBy": {
-                        "type": "string",
-                        "title": "Createdby",
-                        "default": ""
-                    },
-                    "owner": {
-                        "type": "string",
-                        "title": "Owner",
-                        "default": ""
-                    },
-                    "num_contents": {
-                        "type": "integer",
-                        "title": "Num Contents",
-                        "default": 0
-                    },
-                    "notifications": {
-                        "items": {
-                            "$ref": "#/components/schemas/Notification"
-                        },
-                        "type": "array",
-                        "title": "Notifications",
-                        "default": []
-                    },
-                    "count_infringements": {
-                        "additionalProperties": {
-                            "type": "integer"
-                        },
-                        "type": "object",
-                        "title": "Count Infringements",
-                        "default": {
-                            "potential_infringements": 0,
-                            "verified_infringements": 0,
-                            "takedown_pending": 0,
-                            "takedown_successful": 0,
-                            "non_infringements": 0
-                        }
-                    },
-                    "seats": {
-                        "type": "integer",
-                        "title": "Seats",
-                        "default": 1
-                    },
-                    "plan_type": {
-                        "type": "string",
-                        "title": "Plan Type",
-                        "default": ""
-                    },
-                    "profileImg": {
-                        "type": "string",
-                        "title": "Profileimg",
-                        "default": ""
-                    },
-                    "signature": {
-                        "type": "string",
-                        "title": "Signature",
-                        "default": ""
-                    }
-                },
-                "type": "object",
-                "title": "Person"
-            },
-            "Subscription": {
-                "properties": {
-                    "updatedAt": {
-                        "type": "string",
-                        "format": "date-time",
-                        "title": "Updatedat"
-                    },
-                    "_id": {
-                        "type": "string",
-                        "title": " Id",
-                        "default": "67194822bc05a0a474c246be"
-                    },
-                    "personId": {
-                        "type": "string",
-                        "title": "Personid",
-                        "default": ""
-                    },
-                    "planId": {
-                        "type": "string",
-                        "title": "Planid",
-                        "default": ""
-                    },
-                    "startDate": {
-                        "type": "string",
-                        "format": "date-time",
-                        "title": "Startdate",
-                        "default": "2024-10-23T20:01:54.518286Z"
-                    },
-                    "endDate": {
-                        "anyOf": [
-                            {
-                                "type": "string",
-                                "format": "date-time"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Enddate"
-                    },
-                    "status": {
-                        "type": "string",
-                        "title": "Status",
-                        "default": ""
-                    },
-                    "scription_id": {
-                        "type": "string",
-                        "title": "Scription Id",
-                        "default": ""
-                    }
-                },
-                "type": "object",
-                "required": [
-                    "endDate"
-                ],
-                "title": "Subscription",
-                "description": "Represents a subscription for a person to a specific plan.\n\nAttributes:\n    id (PyObjectId): The unique identifier for the subscription.\n    personId (str): The ID of the person associated with the subscription.\n    planId (str): The ID of the plan associated with the subscription.\n    startDate (datetime): The start date of the subscription.\n    endDate (Optional[datetime]): The end date of the subscription.\n    status (str): The status of the subscription.\n    scription_id (str): The ID of the subscription.\n\nMethods:\n    get_plan(db): Retrieves the plan associated with the subscription from the database.\n    get_plan_id(db): Retrieves the plan associated with the subscription using the plan ID from the database."
-            },
-            "UpdateSubscriptionData": {
-                "properties": {
-                    "seats": {
-                        "type": "integer",
-                        "title": "Seats"
-                    },
-                    "plan_type": {
-                        "type": "string",
-                        "title": "Plan Type"
-                    }
-                },
-                "type": "object",
-                "required": [
-                    "seats",
-                    "plan_type"
-                ],
-                "title": "UpdateSubscriptionData"
-            },
-            "ValidationError": {
-                "properties": {
-                    "loc": {
-                        "items": {
-                            "anyOf": [
-                                {
-                                    "type": "string"
-                                },
-                                {
-                                    "type": "integer"
-                                }
-                            ]
-                        },
-                        "type": "array",
-                        "title": "Location"
-                    },
-                    "msg": {
-                        "type": "string",
-                        "title": "Message"
-                    },
-                    "type": {
-                        "type": "string",
-                        "title": "Error Type"
-                    }
-                },
-                "type": "object",
-                "required": [
-                    "loc",
-                    "msg",
-                    "type"
-                ],
-                "title": "ValidationError"
-            },
-            "VideoFaceScrappingRequest": {
-                "properties": {
-                    "task_id": {
-                        "type": "string",
-                        "maxLength": 24,
-                        "minLength": 24,
-                        "title": "Task Id",
-                        "description": "The id of the task."
-                    },
-                    "video_id": {
-                        "type": "string",
-                        "maxLength": 24,
-                        "minLength": 24,
-                        "title": "Video Id",
-                        "description": "The ID of the video."
-                    },
-                    "video_frame_rate": {
-                        "type": "integer",
-                        "title": "Video Frame Rate",
-                        "description": "The frame rate of the video."
-                    },
-                    "faces": {
-                        "items": {
-                            "$ref": "#/components/schemas/VideoScrappedFace"
-                        },
-                        "type": "array",
-                        "title": "Faces",
-                        "description": "The faces scrapped and the frames they are on."
-                    },
-                    "frame_images": {
-                        "items": {
-                            "type": "string"
-                        },
-                        "type": "array",
-                        "title": "Frame Images",
-                        "description": "The base64 encoded images of the frames."
-                    }
-                },
-                "type": "object",
-                "required": [
-                    "task_id",
-                    "video_id",
-                    "video_frame_rate",
-                    "faces",
-                    "frame_images"
-                ],
-                "title": "VideoFaceScrappingRequest"
+                "title": "VideoRequest"
             },
             "VideoScrappedFace": {
                 "properties": {
