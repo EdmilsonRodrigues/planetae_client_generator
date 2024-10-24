@@ -1,0 +1,2 @@
+class ClientGenerator:
+    pass
