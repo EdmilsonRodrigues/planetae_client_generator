@@ -25,7 +25,12 @@ class AngularModelGenerator(BaseModelGenerator):
             case None:
                 anyOf = data.get("anyOf", [])
                 if anyOf:
-                    return " | ".join((cls.get_property_type(option.get("type"), option) for option in anyOf))
+                    return " | ".join(
+                        (
+                            cls.get_property_type(option.get("type"), option)
+                            for option in anyOf
+                        )
+                    )
                 ref = data.get("$ref")
                 if ref:
                     return ref.split("/")[-1]
@@ -55,7 +60,7 @@ if __name__ == "__main__":
 
     with open("example.json") as f:
         example = json.load(f)
-    
+
     schema = example["components"]["schemas"]
 
     print(AngularModelGenerator(schema).generate_models())
