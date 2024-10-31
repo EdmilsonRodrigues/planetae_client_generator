@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Any, Generator
 
 
 class BaseOperationGenerator(ABC):
@@ -35,10 +35,14 @@ class BaseOperationGenerator(ABC):
                         groups[part].update({path: self.paths[path]})
                     else:
                         groups[part] = {path: self.paths[path]}
+                    break
         return groups
 
-    def generate_operations(self) -> str:
-        models = ""
-        for name, schema in self.schemas.items():
-            models += f"{self.generate_model(self.format_name(name), schema)}\n\n"
-        return models
+    def generate_operations(self) -> Generator[tuple[str, str], None, None]:
+        for group, operations in self.group_operations().items():
+            content = self.generate_operation(group, operations)
+            yield group, content
+
+
+if __name__ == "__main__":
+    pass

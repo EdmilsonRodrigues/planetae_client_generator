@@ -1,5 +1,5 @@
 from abc import abstractmethod, ABC
-from typing import Any
+from typing import Any, Generator
 
 
 class BaseModelGenerator(ABC):
@@ -24,8 +24,6 @@ class BaseModelGenerator(ABC):
         name = name.replace("_", " ").replace("-", " ")
         return "".join(cls.capitalize(part) for part in name.split(" "))
 
-    def generate_models(self) -> str:
-        models = ""
+    def generate_models(self) -> Generator[str, None, None]:
         for name, schema in self.schemas.items():
-            models += f"{self.generate_model(self.format_name(name), schema)}\n\n"
-        return models
+            yield f"{self.generate_model(self.format_name(name), schema)}\n\n"

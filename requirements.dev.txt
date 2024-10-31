@@ -1,2 +1,2 @@
-mypy
-ruff
+mypy==1.13.0
+ruff==0.7.1
