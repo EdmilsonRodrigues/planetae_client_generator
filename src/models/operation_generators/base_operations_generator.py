@@ -13,6 +13,12 @@ class BaseOperationGenerator(ABC):
     def generate_operation(cls, name: str, schema: dict[str, Any]) -> str:
         pass
 
+    @classmethod
+    def get_function_name(cls, name: str) -> str:
+        name = name.replace("_", " ").replace("-", " ").title().replace(" ", "")
+        name = name[0].lower() + name[1:]
+        return name
+
     def get_common_parts(self) -> list[str]:
         paths = self.paths.keys()
         first_path = list(paths)[0]
