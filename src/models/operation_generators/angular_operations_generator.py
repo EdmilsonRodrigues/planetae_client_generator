@@ -73,7 +73,7 @@ class Parameters:
     query_parameters: list = []
     path_parameters: list = []
     request_body: dict
-    responses: list
+    responses: dict
 
     def __init__(self, parameters: list, request_body: dict, responses: dict) -> None:
         self.query_parameters = []
@@ -85,7 +85,7 @@ class Parameters:
                 case "path":
                     self.path_parameters.append(parameter)
         self.request_body = request_body
-        self.responses = self.get_responses(responses)
+        self.responses = responses
 
     def get_parameters_str(self):
         string = ""
@@ -105,6 +105,21 @@ class Parameters:
         if not required:
             string += " | null = null"
         return string
+    
+    def get_responses(self) -> str:
+        positive_responses = [self.responses[response] for response in self.responses if int(response) % 100 == 2]
+        responses_str = " | ".join(
+            get_response(response) for response in positive_responses
+        )
+        return responses_str
+    
+    def get_response(self, response: dict) -> str:
+        schema = response["content"]["application/json"]["schema"]
+        try:
+            return schema["$ref"].split("/")[-1]
+        except KeyError:
+            return self.get_parameter_type(schema)
+
 
     @classmethod
     def get_body_item_string(cls, schema: dict) -> str:
@@ -174,10 +189,6 @@ class Parameters:
             else:
                 string += f" = {default}"
         return string
-
-    @staticmethod
-    def get_responses(responses: dict) -> list:
-        return []
 
     def __str__(self) -> str:
         parameters = self.get_parameters_str()
