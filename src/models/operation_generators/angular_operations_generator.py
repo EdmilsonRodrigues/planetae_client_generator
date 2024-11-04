@@ -40,42 +40,43 @@ from src.models.operation_generators.base_operations_generator import (
 """
 
 """
-                    {
-                        "name": "content_id",
-                        "in": "path",
-                        "required": True,
-                        "schema": {
-                            "type": "string",
-                            "minLength": 24,
-                            "maxLength": 24,
-                            "description": "The id of the content",
-                            "title": "Content Id",
-                        },
-                        "description": "The id of the content",
-                    }
-                    {
-                        "name": "order",
-                        "in": "query",
-                        "required": False,
-                        "schema": {
-                            "type": "string",
-                            "description": "The sort order",
-                            "default": "asc",
-                            "title": "Order",
-                        },
-                        "description": "The sort order",
-                    },
-
+{
+    "name": "content_id",
+    "in": "path",
+    "required": True,
+    "schema": {
+        "type": "string",
+        "minLength": 24,
+        "maxLength": 24,
+        "description": "The id of the content",
+        "title": "Content Id",
+    },
+    "description": "The id of the content",
+}
+{
+    "name": "order",
+    "in": "query",
+    "required": False,
+    "schema": {
+        "type": "string",
+        "description": "The sort order",
+        "default": "asc",
+        "title": "Order",
+    },
+    "description": "The sort order",
+},
 """
 
 
 class Parameters:
-    query_parameters: list
-    path_parameters: list
+    query_parameters: list = []
+    path_parameters: list = []
     request_body: dict
     responses: list
 
     def __init__(self, parameters: list, request_body: dict, responses: dict) -> None:
+        self.query_parameters = []
+        self.path_parameters = []
         for parameter in parameters:
             match parameter["in"]:
                 case "query":
@@ -85,12 +86,92 @@ class Parameters:
         self.request_body = request_body
         self.responses = self.get_responses(responses)
 
+    def get_parameters_str(self):
+        string = ""
+        for query in self.query_parameters:
+            string += self.get_parameter_string(query) + ", "
+        for path in self.path_parameters:
+            string += self.get_parameter_string(path) + ", "
+        return string[:-2]
+
+    def get_request_body_str(self):
+        string = ""
+        for body_item in self.request_body:
+            string += self.get_body_item_string(body_item) + ", "
+        return string[:-2]
+
+    @classmethod
+    def get_body_item_string()
+
+    @classmethod
+    def get_parameter_type(cls, schema: dict) -> str:
+        type = schema.get("type", None)
+        match type:
+            case None:
+                anyof = schema.get("anyOf", None)
+                if anyof is not None:
+                    type = " | ".join(
+                        cls.get_parameter_type(option) for option in schema["anyOf"]
+                    )
+                else:
+                    raise NotImplementedError(schema)
+            case "integer":
+                type = "number"
+            case "string":
+                type = "string"
+            case "boolean":
+                type = "boolean"
+            case "null":
+                type = "null"
+            case _:
+                raise NotImplementedError(schema)
+        return type
+
+    @classmethod
+    def get_request_body_type(cls, schema: dict) -> str:
+        type = schema.get("type", None)
+        try:
+            type = cls.get_parameter_type(schema)
+        except NotImplementedError:
+            ref = schema.get("$ref", None)
+            if ref is not None:
+                type = ref.split("/")[-1]
+            else:
+                raise NotImplementedError(schema)
+        return type
+
+    @classmethod
+    def get_parameter_string(cls, parameter: dict) -> str:
+        default = parameter["schema"].get("default", None)
+        try:
+            type = cls.get_parameter_type(parameter["schema"])
+            string = f"{parameter['name']}: {type}"
+        except KeyError:
+            print(parameter)
+            raise
+        if default is not None:
+            if type == "string" or ("string" in type and default != "null"):
+                string += f" = '{default}'"
+            else:
+                string += f" = {default}"
+        return string
+
     @staticmethod
     def get_responses(responses: dict) -> list:
         return []
 
     def __str__(self) -> str:
-        return ""
+        parameters = self.get_parameters_str()
+        request_body = self.get_request_body_str()
+        if parameters and request_body:
+            string = f"{parameters}, {request_body}"
+        elif parameters:
+            string = parameters
+        elif request_body:
+            string = request_body
+        else:
+            string = ""
+        return string
 
 
 class AngularOperationGenerator(BaseOperationGenerator):
@@ -171,7 +252,8 @@ if __name__ == "__main__":
             "get": {
                 "tags": ["Contents"],
                 "summary": "List Content",
-                "description": "Retrieve a list of contents.\n\nParameters:\n- paginated_response (PaginatedResults): The paginated results.\n\nReturns:\n- PaginatedJSONResponse: The paginated results.",
+                "description": "Retrieve a list of contents.\n\nParameters:\n- paginated_response (PaginatedResults): \
+The paginated results.\n\nReturns:\n- PaginatedJSONResponse: The paginated results.",
                 "operationId": "list_content",
                 "security": [{"OAuth2PasswordBearer": []}],
                 "parameters": [
@@ -256,7 +338,9 @@ if __name__ == "__main__":
             "post": {
                 "tags": ["Contents"],
                 "summary": "Create Content",
-                "description": "Create new content.\n\nParameters:\n- content (Content): The content to be created. Do not insert the id nor _id nor owner.\n- session_and_subscription (SessionSubscription): The session and subscription details.\n\nReturns:\n- ORJSONResponse: The created content.",
+                "description": "Create new content.\n\nParameters:\n- content (Content): The content to be created. \
+Do not insert the id nor _id nor owner.\n- session_and_subscription (SessionSubscription): The session and subscription\
+ details.\n\nReturns:\n- ORJSONResponse: The created content.",
                 "operationId": "create_content",
                 "security": [{"OAuth2PasswordBearer": []}],
                 "requestBody": {
@@ -296,7 +380,8 @@ if __name__ == "__main__":
             "get": {
                 "tags": ["Contents"],
                 "summary": "List Content By Accounid",
-                "description": "Retrieve a list of contents by account ID.\n\nParameters:\n- paginated_response (PaginatedResults): The paginated results.\n\nReturns:\n- PaginatedJSONResponse: The paginated results.",
+                "description": "Retrieve a list of contents by account ID.\n\nParameters:\n- paginated_response\
+ (PaginatedResults): The paginated results.\n\nReturns:\n- PaginatedJSONResponse: The paginated results.",
                 "operationId": "list_content_by_accounId",
                 "security": [{"OAuth2PasswordBearer": []}],
                 "parameters": [
@@ -394,7 +479,8 @@ if __name__ == "__main__":
             "get": {
                 "tags": ["Contents"],
                 "summary": "Read Content",
-                "description": "Retrieve content by its ID.\n\nParameters:\n- content (dict): The content details from the dependency.\n\nReturns:\n- ORJSONResponse: The content details.",
+                "description": "Retrieve content by its ID.\n\nParameters:\n- content (dict): The content details from\
+ the dependency.\n\nReturns:\n- ORJSONResponse: The content details.",
                 "operationId": "read_content",
                 "security": [{"OAuth2PasswordBearer": []}],
                 "parameters": [
@@ -436,7 +522,9 @@ if __name__ == "__main__":
             "put": {
                 "tags": ["Contents"],
                 "summary": "Update Content",
-                "description": "Update content by its ID.\n\nParameters:\n- db_content (dict): The content details from the dependency.\n- content (Content): The updated content. Do not insert _id nor owner.\n\nReturns:\n- ORJSONResponse: The updated content.",
+                "description": "Update content by its ID.\n\nParameters:\n- db_content (dict): The content details from\
+ the dependency.\n- content (Content): The updated content. Do not insert _id nor owner.\n\nReturns:\n- ORJSONResponse:\
+ The updated content.",
                 "operationId": "update_content",
                 "security": [{"OAuth2PasswordBearer": []}],
                 "parameters": [
@@ -489,7 +577,8 @@ if __name__ == "__main__":
             "delete": {
                 "tags": ["Contents"],
                 "summary": "Delete Content",
-                "description": "Delete content by its ID.\n\nParameters:\n- content (dict): The content details from the dependency.\n\nReturns:\n- ORJSONResponse: A response indicating the status of the deletion.",
+                "description": "Delete content by its ID.\n\nParameters:\n- content (dict): The content details\
+ from the dependency.\n\nReturns:\n- ORJSONResponse: A response indicating the status of the deletion.",
                 "operationId": "delete_content",
                 "security": [{"OAuth2PasswordBearer": []}],
                 "parameters": [
@@ -533,7 +622,9 @@ if __name__ == "__main__":
             "post": {
                 "tags": ["Contents"],
                 "summary": "Add Content Detection Strings",
-                "description": "Add a detection string to content.\n\nParameters:\n- db_content (dict): The content details from the dependency.\n- detectionString (str): The detection string.\n\nReturns:\n- ORJSONResponse: A response indicating the status of the operation.",
+                "description": "Add a detection string to content.\n\nParameters:\n- db_content (dict):\
+ The content details from the dependency.\n- detectionString (str): The detection string.\n\nReturns:\n- \
+ORJSONResponse: A response indicating the status of the operation.",
                 "operationId": "add_content_detection_strings",
                 "security": [{"OAuth2PasswordBearer": []}],
                 "parameters": [
