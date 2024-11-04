@@ -1,4 +1,5 @@
 from typing import Any
+from src.models.model_generators.base_models_generator import BaseModelGenerator
 from src.models.operation_generators.base_operations_generator import (
     BaseOperationGenerator,
 )
@@ -96,12 +97,29 @@ class Parameters:
 
     def get_request_body_str(self):
         string = ""
-        for body_item in self.request_body:
-            string += self.get_body_item_string(body_item) + ", "
-        return string[:-2]
+        body_item = self.request_body.get("content", None)
+        required = self.request_body.get("required", False)
+        if body_item is None:
+            return None
+        string += self.get_body_item_string(body_item)
+        if not required:
+            string += " | null = null"
+        return string
 
     @classmethod
-    def get_body_item_string()
+    def get_body_item_string(cls, schema: dict) -> str:
+        try:
+            print(schema)
+            multipart = schema.get("multipart/form-data", None)
+            if multipart is not None:
+                return "request: " + BaseModelGenerator.format_name(multipart["schema"]["$ref"].split("/")[-1])
+            type = cls.get_request_body_type(schema["application/json"]["schema"])
+            name = "request"
+            string = f"{name}: {type}"
+        except KeyError:
+            print(schema)
+            raise
+        return string
 
     @classmethod
     def get_parameter_type(cls, schema: dict) -> str:
@@ -136,6 +154,7 @@ class Parameters:
             ref = schema.get("$ref", None)
             if ref is not None:
                 type = ref.split("/")[-1]
+                type = BaseModelGenerator.format_name(type)
             else:
                 raise NotImplementedError(schema)
         return type
