@@ -87,6 +87,13 @@ class Parameters:
         self.request_body = request_body
         self.responses = responses
 
+    def get_queries(self) -> str:
+        queries = [
+            f"{self.get_parameter_string(query, no_default=True, only_name=True)}=${{{self.get_parameter_string(query, no_default=True, only_name=True)}}}"
+            for query in self.query_parameters
+        ]
+        return "&".join(queries)
+
     def get_parameters_str(self):
         string = ""
         for query in self.query_parameters:
@@ -105,29 +112,33 @@ class Parameters:
         if not required:
             string += " | null = null"
         return string
-    
+
     def get_responses(self) -> str:
-        positive_responses = [self.responses[response] for response in self.responses if int(response) % 100 == 2]
+        positive_responses = [
+            self.responses[response]
+            for response in self.responses
+            if int(response) // 100 == 2
+        ]
         responses_str = " | ".join(
-            get_response(response) for response in positive_responses
+            self.get_response(response) for response in positive_responses
         )
         return responses_str
-    
+
     def get_response(self, response: dict) -> str:
         schema = response["content"]["application/json"]["schema"]
         try:
-            return schema["$ref"].split("/")[-1]
+            return BaseModelGenerator.format_name(schema["$ref"].split("/")[-1])
         except KeyError:
             return self.get_parameter_type(schema)
-
 
     @classmethod
     def get_body_item_string(cls, schema: dict) -> str:
         try:
-            print(schema)
             multipart = schema.get("multipart/form-data", None)
             if multipart is not None:
-                return "request: " + BaseModelGenerator.format_name(multipart["schema"]["$ref"].split("/")[-1])
+                return "request: " + BaseModelGenerator.format_name(
+                    multipart["schema"]["$ref"].split("/")[-1]
+                )
             type = cls.get_request_body_type(schema["application/json"]["schema"])
             name = "request"
             string = f"{name}: {type}"
@@ -146,6 +157,8 @@ class Parameters:
                     type = " | ".join(
                         cls.get_parameter_type(option) for option in schema["anyOf"]
                     )
+                elif schema == {}:
+                    type = "any"
                 else:
                     raise NotImplementedError(schema)
             case "integer":
@@ -175,10 +188,17 @@ class Parameters:
         return type
 
     @classmethod
-    def get_parameter_string(cls, parameter: dict) -> str:
-        default = parameter["schema"].get("default", None)
+    def get_parameter_string(
+        cls, parameter: dict, no_default: bool = False, only_name: bool = False
+    ) -> str:
+        if no_default:
+            default = None
+        else:
+            default = parameter["schema"].get("default", None)
         try:
             type = cls.get_parameter_type(parameter["schema"])
+            if only_name:
+                return parameter["name"]
             string = f"{parameter['name']}: {type}"
         except KeyError:
             print(parameter)
@@ -225,12 +245,16 @@ class AngularOperationGenerator(BaseOperationGenerator):
             schema.get("requestBody", {}),
             schema.get("responses", {}),
         )
+        responses = parameters.get_responses()
         func = (
             f"""
-{cls.tab}{name}({parameters}): Observable<{" | ".join(response for response in parameters.responses)}>"""
+{cls.tab}{name}({parameters}): Observable<{parameters}>"""
             + " {\n"
         )
-        func += cls.tab + "}\n"
+        func += f"{cls.tab}{cls.tab}return this.http.{method}<{responses}>(`${{this.apiUrl}}{path.replace("{", "${")}?{parameters.get_queries()}`)"
+        if func[-3] == "?":
+            func = func[:-3] + "`)"
+        func += "\n" + cls.tab + "}\n"
         return func
 
     @classmethod
