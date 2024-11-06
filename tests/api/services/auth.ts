@@ -9,7 +9,7 @@ import * as models from '../models';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = `${environment.APIHost}/api/client/contents`
+  private apiUrl = `${environment.APIHost}`
 
   constructor (private http: HttpClient) { }
 

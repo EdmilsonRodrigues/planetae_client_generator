@@ -5478,7 +5478,7 @@
                 }
             }
         },
-        "/api/client/faces/face/{face_id}/images": {
+        "/api/client/faces/{face_id}/images": {
             "get": {
                 "tags": [
                     "Faces"
@@ -5493,6 +5493,17 @@
                         "schema": {
                             "type": "string",
                             "title": "Face Id"
+                        }
+                    },
+                    {
+                        "name": "image",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 3,
+                            "minimum": 0,
+                            "title": "Image"
                         }
                     }
                 ],
@@ -5531,7 +5542,7 @@
                     "_id": {
                         "type": "string",
                         "title": " Id",
-                        "default": "672bbb705c3f487ab0be4ebd"
+                        "default": "672bc6a0ea81dbdb436bde92"
                     },
                     "accountId": {
                         "type": "string",
@@ -5925,7 +5936,7 @@
                     "_id": {
                         "type": "string",
                         "title": " Id",
-                        "default": "672bbb705c3f487ab0be4ebd"
+                        "default": "672bc6a0ea81dbdb436bde92"
                     },
                     "face_id": {
                         "anyOf": [
@@ -5964,8 +5975,8 @@
                     "infringementPreferences": {
                         "$ref": "#/components/schemas/InfringementPreferences",
                         "default": {
-                            "createdAt": "2024-11-06T18:54:40.417574Z",
-                            "updatedAt": "2024-11-06T18:54:40.417574Z",
+                            "createdAt": "2024-11-06T19:42:24.047520Z",
+                            "updatedAt": "2024-11-06T19:42:24.047520Z",
                             "receiveEmailOnDetection": false,
                             "automaticApproveInfringements": false,
                             "receiveEmailOnTakedown": false,
@@ -6249,7 +6260,7 @@
                     "_id": {
                         "type": "string",
                         "title": " Id",
-                        "default": "672bbb705c3f487ab0be4ebd"
+                        "default": "672bc6a0ea81dbdb436bde92"
                     },
                     "vps": {
                         "type": "string",
@@ -6289,7 +6300,7 @@
                         "type": "string",
                         "format": "date-time",
                         "title": "Last Checkin",
-                        "default": "2024-11-06T18:54:40.547636Z"
+                        "default": "2024-11-06T19:42:24.212172Z"
                     }
                 },
                 "type": "object",
@@ -6317,7 +6328,7 @@
                     "_id": {
                         "type": "string",
                         "title": " Id",
-                        "default": "672bbb705c3f487ab0be4ebd"
+                        "default": "672bc6a0ea81dbdb436bde92"
                     },
                     "type": {
                         "type": "string",
@@ -6380,7 +6391,7 @@
                     "_id": {
                         "type": "string",
                         "title": " Id",
-                        "default": "672bbb705c3f487ab0be4ebd"
+                        "default": "672bc6a0ea81dbdb436bde92"
                     },
                     "details": {
                         "type": "object",
@@ -6677,7 +6688,7 @@
                     "_id": {
                         "type": "string",
                         "title": " Id",
-                        "default": "672bbb705c3f487ab0be4ebd"
+                        "default": "672bc6a0ea81dbdb436bde92"
                     },
                     "accountId": {
                         "type": "string",
@@ -6707,8 +6718,8 @@
                     "infringementPreferences": {
                         "$ref": "#/components/schemas/InfringementPreferences",
                         "default": {
-                            "createdAt": "2024-11-06T18:54:40.448778Z",
-                            "updatedAt": "2024-11-06T18:54:40.448778Z",
+                            "createdAt": "2024-11-06T19:42:24.085275Z",
+                            "updatedAt": "2024-11-06T19:42:24.085275Z",
                             "receiveEmailOnDetection": false,
                             "automaticApproveInfringements": false,
                             "receiveEmailOnTakedown": false,
@@ -6816,7 +6827,7 @@
                     "_id": {
                         "type": "string",
                         "title": " Id",
-                        "default": "672bbb705c3f487ab0be4ebd"
+                        "default": "672bc6a0ea81dbdb436bde92"
                     },
                     "personId": {
                         "type": "string",
@@ -6832,7 +6843,7 @@
                         "type": "string",
                         "format": "date-time",
                         "title": "Startdate",
-                        "default": "2024-11-06T18:54:40.437135Z"
+                        "default": "2024-11-06T19:42:24.074710Z"
                     },
                     "endDate": {
                         "anyOf": [

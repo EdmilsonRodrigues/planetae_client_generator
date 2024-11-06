@@ -81,7 +81,7 @@ import * as models from '../models';
 })
 """
         content += f"export class {name.title()}Service" + " {\n"
-        content += "  private apiUrl = `${environment.APIHost}/api/client/contents`\n\n"
+        content += "  private apiUrl = `${environment.APIHost}`\n\n"
         content += "  constructor (private http: HttpClient) { }\n"
         content += cls.generate_functions(schema=schema)
         content += "}"

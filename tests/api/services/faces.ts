@@ -9,7 +9,7 @@ import * as models from '../models';
   providedIn: 'root'
 })
 export class FacesService {
-  private apiUrl = `${environment.APIHost}/api/client/contents`
+  private apiUrl = `${environment.APIHost}`
 
   constructor (private http: HttpClient) { }
 
@@ -25,7 +25,7 @@ export class FacesService {
     return this.http.get<models.Face>(`${this.apiUrl}/api/client/faces/${faceId}`)
   }
 
-  getFaceImage (faceId: string): Observable<null> {
-    return this.http.get<null>(`${this.apiUrl}/api/client/faces/face/${faceId}/images`)
+  getFaceImage (image: number, faceId: string): Observable<null> {
+    return this.http.get<null>(`${this.apiUrl}/api/client/faces/${faceId}/images?image=${image}`)
   }
 }
