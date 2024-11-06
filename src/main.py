@@ -1,7 +1,7 @@
 import typer
 from models.clent_generator import ClientGenerator
 
-VERSION = "1.0.0"
+VERSION = "1.2.0"
 app = typer.Typer()
 
 
