@@ -141,6 +141,17 @@ export interface DiskComponent {
 	percent: number
 }
 
+export interface Face {
+	createdAt: Date
+	updatedAt: Date
+	videos?: string[]
+	verified?: boolean
+	name: string | null
+	content_id: string | null
+	slug: string
+	metadata?: any
+}
+
 export interface HTTPValidationError {
 	detail: ValidationError[]
 }
@@ -249,6 +260,7 @@ export interface Person {
 	accountStageLabel?: string
 	automaticVerify?: boolean
 	subscriptionId?: string
+	personId?: string
 	infringementPreferences?: InfringementPreferences
 	notificationPreferences?: NotificationPreferences
 	allowedDomains?: string[]

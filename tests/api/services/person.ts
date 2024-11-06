@@ -13,19 +13,19 @@ export class PersonService {
 
   constructor (private http: HttpClient) { }
 
-  readPersonsMe(): Observable<models.Person> {
+  readPersonsMe (): Observable<models.Person> {
     return this.http.get<models.Person>(`${this.apiUrl}/api/client/person/me`)
   }
 
-  updatePersonsMe(): Observable<models.Person> {
+  updatePersonsMe (): Observable<models.Person> {
     return this.http.patch<models.Person>(`${this.apiUrl}/api/client/person/me`)
   }
 
-  updateInfringementPreferences(request: models.FastapiCompatBodyUpdateInfringementPreferences2): Observable<models.Person> {
+  updateInfringementPreferences (request: models.FastapiCompatBodyUpdateInfringementPreferences2): Observable<models.Person> {
     return this.http.patch<models.Person>(`${this.apiUrl}/api/client/person/me/infringement-preferences`, request)
   }
 
-  readPerson(personId: string): Observable<models.Person> {
-    return this.http.get<models.Person>(`${this.apiUrl}/api/client/person/${{personId}}`)
+  readPerson (personId: string): Observable<models.Person> {
+    return this.http.get<models.Person>(`${this.apiUrl}/api/client/person/${personId}`)
   }
 }

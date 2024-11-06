@@ -4851,7 +4851,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/BaseAuthResponse"
+                                    "$ref": "#/components/schemas/ActionModel"
                                 }
                             }
                         }
@@ -4865,7 +4865,7 @@
                     "Authentication"
                 ],
                 "summary": "Sign In With Token",
-                "description": "Endpoint for signing in with a token.\n\nArgs:\n    token (str): The authentication token.\n\nReturns:\n    JSONResponse: A JSON response containing the access token, refresh token, and token type.",
+                "description": "Endpoint for signing in with a token.",
                 "operationId": "sign_in_with_token",
                 "responses": {
                     "200": {
@@ -5222,6 +5222,296 @@
                     }
                 }
             }
+        },
+        "/api/client/faces/": {
+            "get": {
+                "tags": [
+                    "Faces"
+                ],
+                "summary": "Read Faces",
+                "description": "Retrieve all faces.",
+                "operationId": "read_faces",
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "description": "The page number",
+                            "default": 0,
+                            "title": "Page"
+                        },
+                        "description": "The page number"
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "description": "The page size",
+                            "default": 10,
+                            "title": "Size"
+                        },
+                        "description": "The page size"
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "description": "The sort field",
+                            "default": "_id",
+                            "title": "Sort"
+                        },
+                        "description": "The sort field"
+                    },
+                    {
+                        "name": "order",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "description": "The sort order",
+                            "default": "asc",
+                            "title": "Order"
+                        },
+                        "description": "The sort order"
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "The search term",
+                            "default": "",
+                            "title": "Search"
+                        },
+                        "description": "The search term"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedResults"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/client/faces/unknown": {
+            "get": {
+                "tags": [
+                    "Faces"
+                ],
+                "summary": "Read Unknown Faces",
+                "description": "Retrieve all unknown faces.",
+                "operationId": "read_unknown_faces",
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "description": "The page number",
+                            "default": 0,
+                            "title": "Page"
+                        },
+                        "description": "The page number"
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "description": "The page size",
+                            "default": 10,
+                            "title": "Size"
+                        },
+                        "description": "The page size"
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "description": "The sort field",
+                            "default": "_id",
+                            "title": "Sort"
+                        },
+                        "description": "The sort field"
+                    },
+                    {
+                        "name": "order",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "description": "The sort order",
+                            "default": "asc",
+                            "title": "Order"
+                        },
+                        "description": "The sort order"
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "The search term",
+                            "default": "",
+                            "title": "Search"
+                        },
+                        "description": "The search term"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedResults"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/client/faces/{face_id}": {
+            "get": {
+                "tags": [
+                    "Faces"
+                ],
+                "summary": "Read Face",
+                "description": "Retrieve a face.",
+                "operationId": "read_face",
+                "parameters": [
+                    {
+                        "name": "face_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Face Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Face"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/client/faces/face/{face_id}/images": {
+            "get": {
+                "tags": [
+                    "Faces"
+                ],
+                "summary": "Get Face Image",
+                "operationId": "get_face_image",
+                "parameters": [
+                    {
+                        "name": "face_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Face Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -5241,7 +5531,7 @@
                     "_id": {
                         "type": "string",
                         "title": " Id",
-                        "default": "672b36fece39d3b0c1d4b340"
+                        "default": "672bbb705c3f487ab0be4ebd"
                     },
                     "accountId": {
                         "type": "string",
@@ -5635,7 +5925,7 @@
                     "_id": {
                         "type": "string",
                         "title": " Id",
-                        "default": "672b36fece39d3b0c1d4b340"
+                        "default": "672bbb705c3f487ab0be4ebd"
                     },
                     "face_id": {
                         "anyOf": [
@@ -5674,8 +5964,8 @@
                     "infringementPreferences": {
                         "$ref": "#/components/schemas/InfringementPreferences",
                         "default": {
-                            "createdAt": "2024-11-06T09:29:34.218130Z",
-                            "updatedAt": "2024-11-06T09:29:34.218130Z",
+                            "createdAt": "2024-11-06T18:54:40.417574Z",
+                            "updatedAt": "2024-11-06T18:54:40.417574Z",
                             "receiveEmailOnDetection": false,
                             "automaticApproveInfringements": false,
                             "receiveEmailOnTakedown": false,
@@ -5868,6 +6158,69 @@
                 ],
                 "title": "DiskComponent"
             },
+            "Face": {
+                "properties": {
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Createdat"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Updatedat"
+                    },
+                    "videos": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Videos",
+                        "default": []
+                    },
+                    "verified": {
+                        "type": "boolean",
+                        "title": "Verified",
+                        "default": false
+                    },
+                    "name": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Name"
+                    },
+                    "content_id": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Content Id"
+                    },
+                    "slug": {
+                        "type": "string",
+                        "title": "Slug"
+                    },
+                    "metadata": {
+                        "type": "object",
+                        "title": "Metadata",
+                        "default": {}
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "slug"
+                ],
+                "title": "Face"
+            },
             "HTTPValidationError": {
                 "properties": {
                     "detail": {
@@ -5896,7 +6249,7 @@
                     "_id": {
                         "type": "string",
                         "title": " Id",
-                        "default": "672b36fece39d3b0c1d4b340"
+                        "default": "672bbb705c3f487ab0be4ebd"
                     },
                     "vps": {
                         "type": "string",
@@ -5936,7 +6289,7 @@
                         "type": "string",
                         "format": "date-time",
                         "title": "Last Checkin",
-                        "default": "2024-11-06T09:29:34.416819Z"
+                        "default": "2024-11-06T18:54:40.547636Z"
                     }
                 },
                 "type": "object",
@@ -5964,7 +6317,7 @@
                     "_id": {
                         "type": "string",
                         "title": " Id",
-                        "default": "672b36fece39d3b0c1d4b340"
+                        "default": "672bbb705c3f487ab0be4ebd"
                     },
                     "type": {
                         "type": "string",
@@ -6027,7 +6380,7 @@
                     "_id": {
                         "type": "string",
                         "title": " Id",
-                        "default": "672b36fece39d3b0c1d4b340"
+                        "default": "672bbb705c3f487ab0be4ebd"
                     },
                     "details": {
                         "type": "object",
@@ -6324,7 +6677,7 @@
                     "_id": {
                         "type": "string",
                         "title": " Id",
-                        "default": "672b36fece39d3b0c1d4b340"
+                        "default": "672bbb705c3f487ab0be4ebd"
                     },
                     "accountId": {
                         "type": "string",
@@ -6346,11 +6699,16 @@
                         "title": "Subscriptionid",
                         "default": ""
                     },
+                    "personId": {
+                        "type": "string",
+                        "title": "Personid",
+                        "default": ""
+                    },
                     "infringementPreferences": {
                         "$ref": "#/components/schemas/InfringementPreferences",
                         "default": {
-                            "createdAt": "2024-11-06T09:29:34.255241Z",
-                            "updatedAt": "2024-11-06T09:29:34.255241Z",
+                            "createdAt": "2024-11-06T18:54:40.448778Z",
+                            "updatedAt": "2024-11-06T18:54:40.448778Z",
                             "receiveEmailOnDetection": false,
                             "automaticApproveInfringements": false,
                             "receiveEmailOnTakedown": false,
@@ -6458,7 +6816,7 @@
                     "_id": {
                         "type": "string",
                         "title": " Id",
-                        "default": "672b36fece39d3b0c1d4b340"
+                        "default": "672bbb705c3f487ab0be4ebd"
                     },
                     "personId": {
                         "type": "string",
@@ -6468,15 +6826,13 @@
                     },
                     "planId": {
                         "type": "string",
-                        "maxLength": 24,
-                        "minLength": 24,
                         "title": "Planid"
                     },
                     "startDate": {
                         "type": "string",
                         "format": "date-time",
                         "title": "Startdate",
-                        "default": "2024-11-06T09:29:34.238134Z"
+                        "default": "2024-11-06T18:54:40.437135Z"
                     },
                     "endDate": {
                         "anyOf": [

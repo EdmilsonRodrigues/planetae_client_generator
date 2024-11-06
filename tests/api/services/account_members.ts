@@ -13,23 +13,23 @@ export class Account_MembersService {
 
   constructor (private http: HttpClient) { }
 
-  listAccountMember(): Observable<any> {
+  listAccountMember (): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/api/client/account_members`)
   }
 
-  createAccountMember(request: models.AccountMemberInvite): Observable<any> {
+  createAccountMember (request: models.AccountMemberInvite): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/api/client/account_members`, request)
   }
 
-  readAccountMember(accountMemberId: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/api/client/account_members/${{accountMemberId}}`)
+  readAccountMember (accountMemberId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/api/client/account_members/${accountMemberId}`)
   }
 
-  defaultUpdateAccountMember(accountMemberId: string, request: models.AccountMemberInvite): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/api/client/account_members/${{accountMemberId}}`, request)
+  defaultUpdateAccountMember (accountMemberId: string, request: models.AccountMemberInvite): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/api/client/account_members/${accountMemberId}`, request)
   }
 
-  deleteAccountMember(accountMemberId: string): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/api/client/account_members/${{accountMemberId}}`)
+  deleteAccountMember (accountMemberId: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/api/client/account_members/${accountMemberId}`)
   }
 }

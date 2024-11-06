@@ -13,7 +13,7 @@ export class NotificationsService {
 
   constructor (private http: HttpClient) { }
 
-  readNotifications(page: number = 0, size: number = 10, sort: string = '_id', order: string = 'asc', search: string | null = ''): Observable<models.PaginatedResults> {
+  readNotifications (page: number = 0, size: number = 10, sort: string = '_id', order: string = 'asc', search: string | null = ''): Observable<models.PaginatedResults> {
     return this.http.get<models.PaginatedResults>(`${this.apiUrl}/api/client/notifications/?page=${page}&size=${size}&sort=${sort}&order=${order}&search=${search}`)
   }
 }

@@ -13,7 +13,7 @@ export class PlanService {
 
   constructor (private http: HttpClient) { }
 
-  updateSubscriptionPlans(request: models.UpdateSubscriptionData): Observable<any> {
+  updateSubscriptionPlans (request: models.UpdateSubscriptionData): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/api/client/plan/update`, request)
   }
 }

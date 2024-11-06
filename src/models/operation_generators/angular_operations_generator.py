@@ -31,7 +31,7 @@ class AngularOperationGenerator(BaseOperationGenerator):
         responses = parameters.get_responses()
         func = (
             f"""
-{cls.tab}{name}({parameters}): Observable<{responses}>"""
+{cls.tab}{name} ({parameters}): Observable<{responses}>"""
             + " {\n"
         )            
         func += f"{cls.tab}{cls.tab}return this.http.{method}<{responses}>\
@@ -50,7 +50,7 @@ class AngularOperationGenerator(BaseOperationGenerator):
         for match in matches:
             parameter = BaseModelGenerator.format_name(match)
             parameter = parameter[0].lower() + parameter[1:]
-            path = path.replace(match, f"${{{parameter}}}")
+            path = path.replace(match, f"${parameter}")
         return path
 
     @classmethod

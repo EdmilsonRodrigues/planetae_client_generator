@@ -13,7 +13,7 @@ export class PlansService {
 
   constructor (private http: HttpClient) { }
 
-  listPlans(): Observable<any> {
+  listPlans (): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/api/client/plans`)
   }
 }
