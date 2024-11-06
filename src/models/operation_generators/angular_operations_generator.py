@@ -74,7 +74,7 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { environment } from '@env/environment'
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
-import * as models from '../models';
+import * as models from '../models'
 
 @Injectable({
   providedIn: 'root'
@@ -84,7 +84,7 @@ import * as models from '../models';
         content += "  private apiUrl = `${environment.APIHost}`\n\n"
         content += "  constructor (private http: HttpClient) { }\n"
         content += cls.generate_functions(schema=schema)
-        content += "}"
+        content += "}\n"
         return content
 
 
