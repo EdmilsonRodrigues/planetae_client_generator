@@ -89,7 +89,8 @@ class Parameters:
 
     def get_queries(self) -> str:
         queries = [
-            f"{self.get_parameter_string(query, no_default=True, only_name=True)}=${{{self.get_parameter_string(query, no_default=True, only_name=True)}}}"
+            f"{self.get_parameter_string(query, no_default=True, only_name=True)}=$\
+{{{self.get_parameter_string(query, no_default=True, only_name=True)}}}"
             for query in self.query_parameters
         ]
         return "&".join(queries)
@@ -125,9 +126,12 @@ class Parameters:
         return responses_str
 
     def get_response(self, response: dict) -> str:
-        schema = response["content"]["application/json"]["schema"]
         try:
-            return BaseModelGenerator.format_name(schema["$ref"].split("/")[-1])
+            schema = response["content"]["application/json"]["schema"]
+        except KeyError:
+            return "null"
+        try:
+            return "models." + BaseModelGenerator.format_name(schema["$ref"].split("/")[-1])
         except KeyError:
             return self.get_parameter_type(schema)
 
@@ -136,32 +140,41 @@ class Parameters:
         try:
             multipart = schema.get("multipart/form-data", None)
             if multipart is not None:
-                return "request: " + BaseModelGenerator.format_name(
+                return "request: " + "models." + BaseModelGenerator.format_name(
                     multipart["schema"]["$ref"].split("/")[-1]
                 )
             type = cls.get_request_body_type(schema["application/json"]["schema"])
             name = "request"
             string = f"{name}: {type}"
         except KeyError:
-            print(schema)
-            raise
+            form = schema.get("application/x-www-form-urlencoded", None)
+            if form is not None:
+                string = "request: " + "models." + BaseModelGenerator.format_name(
+                    form["schema"]["$ref"].split("/")[-1]
+                )
+            else:
+                print(schema)
+                raise
         return string
 
     @classmethod
-    def get_parameter_type(cls, schema: dict) -> str:
+    def get_parameter_type(cls, schema: dict, array: bool = False) -> str:
         type = schema.get("type", None)
         match type:
             case None:
                 anyof = schema.get("anyOf", None)
+                ref = schema.get("$ref", None)
                 if anyof is not None:
                     type = " | ".join(
                         cls.get_parameter_type(option) for option in schema["anyOf"]
                     )
                 elif schema == {}:
                     type = "any"
+                elif ref is not None:
+                    type = "models." + BaseModelGenerator.format_name(ref.split("/")[-1])
                 else:
                     raise NotImplementedError(schema)
-            case "integer":
+            case "integer" | "number":
                 type = "number"
             case "string":
                 type = "string"
@@ -169,8 +182,13 @@ class Parameters:
                 type = "boolean"
             case "null":
                 type = "null"
+            case "array":
+                items = schema["items"]
+                type = cls.get_parameter_type(items, array=True)
             case _:
                 raise NotImplementedError(schema)
+        if array:
+            type = " | ".join(f"{part}[]" for part in type.split(" | "))
         return type
 
     @classmethod
@@ -182,7 +200,7 @@ class Parameters:
             ref = schema.get("$ref", None)
             if ref is not None:
                 type = ref.split("/")[-1]
-                type = BaseModelGenerator.format_name(type)
+                type = "models." + BaseModelGenerator.format_name(type)
             else:
                 raise NotImplementedError(schema)
         return type
@@ -248,12 +266,15 @@ class AngularOperationGenerator(BaseOperationGenerator):
         responses = parameters.get_responses()
         func = (
             f"""
-{cls.tab}{name}({parameters}): Observable<{parameters}>"""
+{cls.tab}{name}({parameters}): Observable<{responses}>"""
             + " {\n"
-        )
-        func += f"{cls.tab}{cls.tab}return this.http.{method}<{responses}>(`${{this.apiUrl}}{path.replace("{", "${")}?{parameters.get_queries()}`)"
+        )            
+        func += f"{cls.tab}{cls.tab}return this.http.{method}<{responses}>\
+(`${{this.apiUrl}}{path.replace("{", "${")}?{parameters.get_queries()}`)"
         if func[-3] == "?":
             func = func[:-3] + "`)"
+        if "request: " in str(parameters):
+            func = func[:-1] + ", " + "request" + ")"
         func += "\n" + cls.tab + "}\n"
         return func
 
@@ -278,6 +299,7 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { environment } from '@env/environment'
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
+import * as models from '../models';
 
 @Injectable({
   providedIn: 'root'

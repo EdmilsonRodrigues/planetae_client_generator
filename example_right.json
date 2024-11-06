@@ -21,18 +21,6 @@
                 ],
                 "parameters": [
                     {
-                        "name": "expansions",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "description": "The expansions comma separated",
-                            "default": "",
-                            "title": "Expansions"
-                        },
-                        "description": "The expansions comma separated"
-                    },
-                    {
                         "name": "page",
                         "in": "query",
                         "required": false,
@@ -956,6 +944,34 @@
                 }
             }
         },
+        "/api/client/admin/infringements/potential": {
+            "get": {
+                "tags": [
+                    "Admin",
+                    "Admin: Infringements"
+                ],
+                "summary": "Get Potential Va Infringements",
+                "description": "Retrieve potential VA infringements from the database.\n\nReturns:\n- list[dict]: A list of potential VA infringements.",
+                "operationId": "admin-get_potential_va_infringements",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PotentialVAResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ]
+            }
+        },
         "/api/client/admin/infringements/{infringement_id}": {
             "get": {
                 "tags": [
@@ -1259,6 +1275,132 @@
                         "description": "The id of the infringement"
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ActionModel"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/client/admin/infringements/{infringement_id}/verify": {
+            "post": {
+                "tags": [
+                    "Admin",
+                    "Admin: Infringements"
+                ],
+                "summary": "Verify Infringement",
+                "description": "Verify an infringement.\n\nParameters:\n- db_infringement (dict): The infringement details from the database.\n- verified (bool): The verification status of the infringement.\n\nReturns:\n- ORJSONResponse: The status of the operation.",
+                "operationId": "admin-verify_infringement",
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "infringement_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "minLength": 24,
+                            "maxLength": 24,
+                            "description": "The id of the infringement",
+                            "title": "Infringement Id"
+                        },
+                        "description": "The id of the infringement"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Body_admin-verify_infringement"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ActionModel"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/client/admin/infringements/{infringement_id}/automatic-verify": {
+            "post": {
+                "tags": [
+                    "Admin",
+                    "Admin: Infringements"
+                ],
+                "summary": "Automatically Verify Infringement",
+                "description": "Verify an infringement.",
+                "operationId": "admin-automatically_verify_infringement",
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "infringement_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "minLength": 24,
+                            "maxLength": 24,
+                            "description": "The id of the infringement",
+                            "title": "Infringement Id"
+                        },
+                        "description": "The id of the infringement"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Body_admin-automatically_verify_infringement"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Successful Response",
@@ -2943,7 +3085,7 @@
                     "Contents"
                 ],
                 "summary": "List Content",
-                "description": "Retrieve a list of contents.\n\nParameters:\n- paginated_response (PaginatedResults): The paginated results.\n\nReturns:\n- PaginatedJSONResponse: The paginated results.",
+                "description": "Retrieve a list of contents.",
                 "operationId": "list_content",
                 "security": [
                     {
@@ -3990,7 +4132,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/Infringement",
+                                "$ref": "#/components/schemas/InfringementRequest",
                                 "description": "The infringement to create. Do not insert the id nor _id nor owner"
                             }
                         }
@@ -4018,6 +4160,33 @@
                         }
                     }
                 }
+            }
+        },
+        "/api/client/infringements/count": {
+            "get": {
+                "tags": [
+                    "Infringements"
+                ],
+                "summary": "Get Infringements Count",
+                "description": "Retrieve the count of infringements.\n\nParameters:\n- session (Person): The session details.\n\nReturns:\n- ORJSONResponse: The count of infringements.",
+                "operationId": "get_infringements_count",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CountInfringements"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ]
             }
         },
         "/api/client/infringements/{infringement_id}": {
@@ -4669,6 +4838,27 @@
                 }
             }
         },
+        "/api/client/auth/sign-up": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Sign Up",
+                "operationId": "sign_up",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BaseAuthResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/client/auth/sign-in-with-token": {
             "post": {
                 "tags": [
@@ -4926,6 +5116,112 @@
                     }
                 }
             }
+        },
+        "/api/client/notifications/": {
+            "get": {
+                "tags": [
+                    "Notifications"
+                ],
+                "summary": "Read Notifications",
+                "description": "Retrieve notifications for the currently authenticated person.",
+                "operationId": "read_notifications",
+                "security": [
+                    {
+                        "OAuth2PasswordBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "description": "The page number",
+                            "default": 0,
+                            "title": "Page"
+                        },
+                        "description": "The page number"
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "description": "The page size",
+                            "default": 10,
+                            "title": "Size"
+                        },
+                        "description": "The page size"
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "description": "The sort field",
+                            "default": "_id",
+                            "title": "Sort"
+                        },
+                        "description": "The sort field"
+                    },
+                    {
+                        "name": "order",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "description": "The sort order",
+                            "default": "asc",
+                            "title": "Order"
+                        },
+                        "description": "The sort order"
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "The search term",
+                            "default": "",
+                            "title": "Search"
+                        },
+                        "description": "The search term"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedResults"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -4945,7 +5241,7 @@
                     "_id": {
                         "type": "string",
                         "title": " Id",
-                        "default": "671a7e9204946d56c0ed0e35"
+                        "default": "672b36fece39d3b0c1d4b340"
                     },
                     "accountId": {
                         "type": "string",
@@ -5135,104 +5431,6 @@
                 ],
                 "title": "Body_add_content_detection_strings"
             },
-            "Body_add_face_preview": {
-                "properties": {
-                    "content_id": {
-                        "type": "string",
-                        "title": "Content Id",
-                        "description": "The id of the content."
-                    },
-                    "file_encoded": {
-                        "anyOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "File Encoded",
-                        "description": "The base64 encoded image file."
-                    },
-                    "task_id": {
-                        "type": "string",
-                        "title": "Task Id",
-                        "description": "The id of the task."
-                    }
-                },
-                "type": "object",
-                "required": [
-                    "content_id",
-                    "file_encoded",
-                    "task_id"
-                ],
-                "title": "Body_add_face_preview"
-            },
-            "Body_add_images": {
-                "properties": {
-                    "task_id": {
-                        "type": "string",
-                        "title": "Task Id",
-                        "description": "The id of the task."
-                    },
-                    "images": {
-                        "items": {
-                            "type": "string"
-                        },
-                        "type": "array",
-                        "title": "Images",
-                        "description": "The base64 encoded images."
-                    }
-                },
-                "type": "object",
-                "required": [
-                    "task_id",
-                    "images"
-                ],
-                "title": "Body_add_images"
-            },
-            "Body_add_search_results": {
-                "properties": {
-                    "task_id": {
-                        "type": "string",
-                        "title": "Task Id",
-                        "description": "The id of the task."
-                    },
-                    "urls": {
-                        "items": {
-                            "type": "string"
-                        },
-                        "type": "array",
-                        "title": "Urls",
-                        "description": "The list of urls to scrape.",
-                        "default": []
-                    }
-                },
-                "type": "object",
-                "required": [
-                    "task_id"
-                ],
-                "title": "Body_add_search_results"
-            },
-            "Body_add_video": {
-                "properties": {
-                    "task_id": {
-                        "type": "string",
-                        "title": "Task Id",
-                        "description": "The id of the task."
-                    },
-                    "metadata": {
-                        "$ref": "#/components/schemas/VideoRequest",
-                        "description": "The metadata of the video."
-                    }
-                },
-                "type": "object",
-                "required": [
-                    "task_id",
-                    "metadata"
-                ],
-                "title": "Body_add_video"
-            },
             "Body_admin-add_content_allowed_domains": {
                 "properties": {
                     "allowedDomain": {
@@ -5261,6 +5459,19 @@
                 ],
                 "title": "Body_admin-add_content_detection_strings"
             },
+            "Body_admin-automatically_verify_infringement": {
+                "properties": {
+                    "verify": {
+                        "type": "boolean",
+                        "title": "Verify"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "verify"
+                ],
+                "title": "Body_admin-automatically_verify_infringement"
+            },
             "Body_admin-upload_content_files": {
                 "properties": {
                     "files": {
@@ -5278,119 +5489,18 @@
                 ],
                 "title": "Body_admin-upload_content_files"
             },
-            "Body_check_takedown": {
+            "Body_admin-verify_infringement": {
                 "properties": {
-                    "task_id": {
-                        "type": "string",
-                        "title": "Task Id",
-                        "description": "The id of the task."
-                    },
-                    "infringement_id": {
-                        "type": "string",
-                        "title": "Infringement Id",
-                        "description": "The id of the infringement."
-                    },
-                    "takendown": {
+                    "verified": {
                         "type": "boolean",
-                        "title": "Takendown",
-                        "description": "Whether the infringement was taken down."
-                    },
-                    "results": {
-                        "type": "object",
-                        "title": "Results",
-                        "description": "The results of the takedown.",
-                        "default": {}
-                    },
-                    "new_infringements": {
-                        "items": {
-                            "type": "string"
-                        },
-                        "type": "array",
-                        "title": "New Infringements",
-                        "description": "The new infringements.",
-                        "default": []
+                        "title": "Verified"
                     }
                 },
                 "type": "object",
                 "required": [
-                    "task_id",
-                    "infringement_id",
-                    "takendown"
+                    "verified"
                 ],
-                "title": "Body_check_takedown"
-            },
-            "Body_send_matched_faces": {
-                "properties": {
-                    "faces": {
-                        "items": {
-                            "type": "string"
-                        },
-                        "type": "array",
-                        "title": "Faces",
-                        "description": "Whether the faces matched."
-                    },
-                    "task_id": {
-                        "type": "string",
-                        "title": "Task Id",
-                        "description": "The id of the task."
-                    },
-                    "content_id": {
-                        "type": "string",
-                        "title": "Content Id",
-                        "description": "The id of the content."
-                    },
-                    "video_id": {
-                        "anyOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Video Id",
-                        "description": "The id of the video."
-                    },
-                    "old_task_id": {
-                        "anyOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Old Task Id",
-                        "description": "The id of the old task."
-                    }
-                },
-                "type": "object",
-                "required": [
-                    "faces",
-                    "task_id",
-                    "content_id"
-                ],
-                "title": "Body_send_matched_faces"
-            },
-            "Body_send_takedown": {
-                "properties": {
-                    "task_id": {
-                        "type": "string",
-                        "title": "Task Id",
-                        "description": "The id of the task."
-                    },
-                    "infringement_id": {
-                        "type": "string",
-                        "title": "Infringement Id",
-                        "description": "The id of the infringement."
-                    }
-                },
-                "type": "object",
-                "required": [
-                    "task_id",
-                    "infringement_id"
-                ],
-                "title": "Body_send_takedown"
+                "title": "Body_admin-verify_infringement"
             },
             "Body_sign_in": {
                 "properties": {
@@ -5449,20 +5559,6 @@
                 ],
                 "title": "Body_sign_in"
             },
-            "Body_update_task": {
-                "properties": {
-                    "task_status": {
-                        "type": "string",
-                        "title": "Task Status",
-                        "description": "The status of the task."
-                    }
-                },
-                "type": "object",
-                "required": [
-                    "task_status"
-                ],
-                "title": "Body_update_task"
-            },
             "Body_upload_content_files": {
                 "properties": {
                     "files": {
@@ -5518,8 +5614,7 @@
                     },
                     "description": {
                         "type": "string",
-                        "title": "Description",
-                        "default": ""
+                        "title": "Description"
                     },
                     "urls": {
                         "items": {
@@ -5540,7 +5635,7 @@
                     "_id": {
                         "type": "string",
                         "title": " Id",
-                        "default": "671a7e9204946d56c0ed0e35"
+                        "default": "672b36fece39d3b0c1d4b340"
                     },
                     "face_id": {
                         "anyOf": [
@@ -5579,8 +5674,8 @@
                     "infringementPreferences": {
                         "$ref": "#/components/schemas/InfringementPreferences",
                         "default": {
-                            "createdAt": "2024-10-24T18:06:26.083755Z",
-                            "updatedAt": "2024-10-24T18:06:26.083755Z",
+                            "createdAt": "2024-11-06T09:29:34.218130Z",
+                            "updatedAt": "2024-11-06T09:29:34.218130Z",
                             "receiveEmailOnDetection": false,
                             "automaticApproveInfringements": false,
                             "receiveEmailOnTakedown": false,
@@ -5614,10 +5709,11 @@
                     "title",
                     "type",
                     "modelName",
+                    "description",
                     "owner"
                 ],
                 "title": "Content",
-                "description": "Represents a piece of content.\n\nAttributes:\n    id (PyObjectId): The unique identifier for the content.\n    title (str): The title of the content.\n    type (str): The type of the content.\n    description (str): The description of the content.\n    metadata (Dict[str, Any]): Additional metadata associated with the content.\n    owner (str): The owner of the content.\n    imagePreview (Optional[str]): The URL of the image preview for the content.\n    url (Optional[str]): The URL of the content.\n    tags (List[str]): The tags associated with the content.\n    infringementPreferences (InfringementPreferences): The infringement preferences for the content.\n    detectionStrings (List[str]): The detection strings for the content.\n    allowedDomains (List[str]): The allowed domains for the content.\n    files (List[str]): The files associated with the content.\n    is_verified (bool): Indicates whether the content is verified.\n    updatedAt (datetime): The date and time when the content was last updated.\n    createdAt (datetime): The date and time when the content was created."
+                "description": "Represents a piece of content."
             },
             "ContentRequest": {
                 "properties": {
@@ -5644,8 +5740,7 @@
                     },
                     "description": {
                         "type": "string",
-                        "title": "Description",
-                        "default": ""
+                        "title": "Description"
                     },
                     "urls": {
                         "items": {
@@ -5668,7 +5763,8 @@
                 "required": [
                     "title",
                     "type",
-                    "modelName"
+                    "modelName",
+                    "description"
                 ],
                 "title": "ContentRequest"
             },
@@ -5684,6 +5780,47 @@
                     "other"
                 ],
                 "title": "ContentTypes"
+            },
+            "CountInfringements": {
+                "properties": {
+                    "potential_infringements": {
+                        "type": "integer",
+                        "title": "Potential Infringements",
+                        "default": 0
+                    },
+                    "verified_infringements": {
+                        "type": "integer",
+                        "title": "Verified Infringements",
+                        "default": 0
+                    },
+                    "takedown_pending": {
+                        "type": "integer",
+                        "title": "Takedown Pending",
+                        "default": 0
+                    },
+                    "takedown_successful": {
+                        "type": "integer",
+                        "title": "Takedown Successful",
+                        "default": 0
+                    },
+                    "non_infringements": {
+                        "type": "integer",
+                        "title": "Non Infringements",
+                        "default": 0
+                    },
+                    "total": {
+                        "type": "integer",
+                        "title": "Total",
+                        "default": 0
+                    },
+                    "unread": {
+                        "type": "integer",
+                        "title": "Unread",
+                        "default": 0
+                    }
+                },
+                "type": "object",
+                "title": "CountInfringements"
             },
             "Credentials": {
                 "properties": {
@@ -5744,80 +5881,6 @@
                 "type": "object",
                 "title": "HTTPValidationError"
             },
-            "ImageFaceScrappingRequest": {
-                "properties": {
-                    "task_id": {
-                        "type": "string",
-                        "maxLength": 24,
-                        "minLength": 24,
-                        "title": "Task Id",
-                        "description": "The id of the task."
-                    },
-                    "old_task_id": {
-                        "type": "string",
-                        "maxLength": 24,
-                        "minLength": 24,
-                        "title": "Old Task Id",
-                        "description": "The ID of the video."
-                    },
-                    "faces": {
-                        "items": {
-                            "$ref": "#/components/schemas/ImageScrappedFace"
-                        },
-                        "type": "array",
-                        "title": "Faces",
-                        "description": "The faces scrapped and the frames they are on."
-                    },
-                    "images": {
-                        "items": {
-                            "type": "string"
-                        },
-                        "type": "array",
-                        "title": "Images",
-                        "description": "The base64 encoded images of the frames."
-                    }
-                },
-                "type": "object",
-                "required": [
-                    "task_id",
-                    "old_task_id",
-                    "faces",
-                    "images"
-                ],
-                "title": "ImageFaceScrappingRequest"
-            },
-            "ImageScrappedFace": {
-                "properties": {
-                    "face_file": {
-                        "type": "string",
-                        "title": "Face File",
-                        "description": "The name of the file."
-                    },
-                    "images": {
-                        "items": {
-                            "type": "string"
-                        },
-                        "type": "array",
-                        "title": "Images",
-                        "description": "The frames the face is on."
-                    },
-                    "face_images": {
-                        "items": {
-                            "type": "string"
-                        },
-                        "type": "array",
-                        "title": "Face Images",
-                        "description": "The base64 encoded images of the faces."
-                    }
-                },
-                "type": "object",
-                "required": [
-                    "face_file",
-                    "images",
-                    "face_images"
-                ],
-                "title": "ImageScrappedFace"
-            },
             "Infrastructure": {
                 "properties": {
                     "createdAt": {
@@ -5833,7 +5896,7 @@
                     "_id": {
                         "type": "string",
                         "title": " Id",
-                        "default": "671a7e9204946d56c0ed0e35"
+                        "default": "672b36fece39d3b0c1d4b340"
                     },
                     "vps": {
                         "type": "string",
@@ -5873,7 +5936,7 @@
                         "type": "string",
                         "format": "date-time",
                         "title": "Last Checkin",
-                        "default": "2024-10-24T18:06:26.903830Z"
+                        "default": "2024-11-06T09:29:34.416819Z"
                     }
                 },
                 "type": "object",
@@ -5901,7 +5964,7 @@
                     "_id": {
                         "type": "string",
                         "title": " Id",
-                        "default": "671a7e9204946d56c0ed0e35"
+                        "default": "672b36fece39d3b0c1d4b340"
                     },
                     "type": {
                         "type": "string",
@@ -5931,6 +5994,26 @@
             },
             "Infringement": {
                 "properties": {
+                    "contentId": {
+                        "type": "string",
+                        "maxLength": 24,
+                        "minLength": 24,
+                        "title": "Contentid"
+                    },
+                    "personId": {
+                        "type": "string",
+                        "maxLength": 24,
+                        "minLength": 24,
+                        "title": "Personid"
+                    },
+                    "source": {
+                        "type": "string",
+                        "title": "Source"
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/InfringementStatus",
+                        "default": "verified"
+                    },
                     "createdAt": {
                         "type": "string",
                         "format": "date-time",
@@ -5944,7 +6027,7 @@
                     "_id": {
                         "type": "string",
                         "title": " Id",
-                        "default": "671a7e9204946d56c0ed0e35"
+                        "default": "672b36fece39d3b0c1d4b340"
                     },
                     "details": {
                         "type": "object",
@@ -5967,9 +6050,21 @@
                         "type": "boolean",
                         "title": "Lastupdateread",
                         "default": false
+                    },
+                    "owner": {
+                        "type": "string",
+                        "maxLength": 24,
+                        "minLength": 24,
+                        "title": "Owner"
                     }
                 },
                 "type": "object",
+                "required": [
+                    "contentId",
+                    "personId",
+                    "source",
+                    "owner"
+                ],
                 "title": "Infringement"
             },
             "InfringementPreferences": {
@@ -6007,6 +6102,49 @@
                 },
                 "type": "object",
                 "title": "InfringementPreferences"
+            },
+            "InfringementRequest": {
+                "properties": {
+                    "contentId": {
+                        "type": "string",
+                        "maxLength": 24,
+                        "minLength": 24,
+                        "title": "Contentid"
+                    },
+                    "personId": {
+                        "type": "string",
+                        "maxLength": 24,
+                        "minLength": 24,
+                        "title": "Personid"
+                    },
+                    "source": {
+                        "type": "string",
+                        "title": "Source"
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/InfringementStatus",
+                        "default": "verified"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "contentId",
+                    "personId",
+                    "source"
+                ],
+                "title": "InfringementRequest"
+            },
+            "InfringementStatus": {
+                "type": "string",
+                "enum": [
+                    "potential-VA",
+                    "potential",
+                    "verified",
+                    "pending",
+                    "successful",
+                    "non-infringement"
+                ],
+                "title": "InfringementStatus"
             },
             "Level": {
                 "type": "string",
@@ -6088,6 +6226,28 @@
                 ],
                 "title": "OutsetaLoginResponse"
             },
+            "PaginatedResults": {
+                "properties": {
+                    "pagination": {
+                        "type": "object",
+                        "title": "Pagination"
+                    },
+                    "results": {
+                        "items": {
+                            "type": "object"
+                        },
+                        "type": "array",
+                        "title": "Results"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "pagination",
+                    "results"
+                ],
+                "title": "PaginatedResults",
+                "description": "Paginated results.\n\nAttributes:\n- pagination (dict): The pagination parameters.\n- results (list[dict]): The results."
+            },
             "PendingTasks": {
                 "properties": {
                     "id": {
@@ -6164,7 +6324,7 @@
                     "_id": {
                         "type": "string",
                         "title": " Id",
-                        "default": "671a7e9204946d56c0ed0e35"
+                        "default": "672b36fece39d3b0c1d4b340"
                     },
                     "accountId": {
                         "type": "string",
@@ -6176,6 +6336,11 @@
                         "title": "Accountstagelabel",
                         "default": ""
                     },
+                    "automaticVerify": {
+                        "type": "boolean",
+                        "title": "Automaticverify",
+                        "default": false
+                    },
                     "subscriptionId": {
                         "type": "string",
                         "title": "Subscriptionid",
@@ -6184,8 +6349,8 @@
                     "infringementPreferences": {
                         "$ref": "#/components/schemas/InfringementPreferences",
                         "default": {
-                            "createdAt": "2024-10-24T18:06:26.145750Z",
-                            "updatedAt": "2024-10-24T18:06:26.145750Z",
+                            "createdAt": "2024-11-06T09:29:34.255241Z",
+                            "updatedAt": "2024-11-06T09:29:34.255241Z",
                             "receiveEmailOnDetection": false,
                             "automaticApproveInfringements": false,
                             "receiveEmailOnTakedown": false,
@@ -6265,6 +6430,19 @@
                 ],
                 "title": "Person"
             },
+            "PotentialVAResponse": {
+                "properties": {
+                    "potential_va": {
+                        "type": "integer",
+                        "title": "Potential Va"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "potential_va"
+                ],
+                "title": "PotentialVAResponse"
+            },
             "Subscription": {
                 "properties": {
                     "createdAt": {
@@ -6280,7 +6458,7 @@
                     "_id": {
                         "type": "string",
                         "title": " Id",
-                        "default": "671a7e9204946d56c0ed0e35"
+                        "default": "672b36fece39d3b0c1d4b340"
                     },
                     "personId": {
                         "type": "string",
@@ -6298,7 +6476,7 @@
                         "type": "string",
                         "format": "date-time",
                         "title": "Startdate",
-                        "default": "2024-10-24T18:06:26.118372Z"
+                        "default": "2024-11-06T09:29:34.238134Z"
                     },
                     "endDate": {
                         "anyOf": [
@@ -6392,274 +6570,6 @@
                 ],
                 "title": "ValidationError"
             },
-            "VideoFaceScrappingRequest": {
-                "properties": {
-                    "task_id": {
-                        "type": "string",
-                        "maxLength": 24,
-                        "minLength": 24,
-                        "title": "Task Id",
-                        "description": "The id of the task."
-                    },
-                    "video_id": {
-                        "type": "string",
-                        "maxLength": 24,
-                        "minLength": 24,
-                        "title": "Video Id",
-                        "description": "The ID of the video."
-                    },
-                    "video_frame_rate": {
-                        "type": "integer",
-                        "title": "Video Frame Rate",
-                        "description": "The frame rate of the video."
-                    },
-                    "faces": {
-                        "items": {
-                            "$ref": "#/components/schemas/VideoScrappedFace"
-                        },
-                        "type": "array",
-                        "title": "Faces",
-                        "description": "The faces scrapped and the frames they are on."
-                    },
-                    "frame_images": {
-                        "items": {
-                            "type": "string"
-                        },
-                        "type": "array",
-                        "title": "Frame Images",
-                        "description": "The base64 encoded images of the frames."
-                    }
-                },
-                "type": "object",
-                "required": [
-                    "task_id",
-                    "video_id",
-                    "video_frame_rate",
-                    "faces",
-                    "frame_images"
-                ],
-                "title": "VideoFaceScrappingRequest"
-            },
-            "VideoRequest": {
-                "properties": {
-                    "url": {
-                        "anyOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Url"
-                    },
-                    "title": {
-                        "anyOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Title"
-                    },
-                    "description": {
-                        "anyOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Description"
-                    },
-                    "tags": {
-                        "items": {
-                            "type": "string"
-                        },
-                        "type": "array",
-                        "title": "Tags",
-                        "default": []
-                    },
-                    "views": {
-                        "anyOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Views"
-                    },
-                    "likes": {
-                        "anyOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Likes"
-                    },
-                    "dislikes": {
-                        "anyOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Dislikes"
-                    },
-                    "duration": {
-                        "anyOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Duration"
-                    },
-                    "favorites": {
-                        "anyOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Favorites"
-                    },
-                    "rating": {
-                        "anyOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Rating"
-                    },
-                    "uploader": {
-                        "anyOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Uploader"
-                    },
-                    "uploader_url": {
-                        "anyOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Uploader Url"
-                    },
-                    "uploader_verified": {
-                        "type": "boolean",
-                        "title": "Uploader Verified",
-                        "default": false
-                    },
-                    "uploader_producer": {
-                        "type": "boolean",
-                        "title": "Uploader Producer",
-                        "default": false
-                    },
-                    "categories": {
-                        "items": {
-                            "type": "string"
-                        },
-                        "type": "array",
-                        "title": "Categories",
-                        "default": []
-                    },
-                    "comments": {
-                        "items": {
-                            "type": "string"
-                        },
-                        "type": "array",
-                        "title": "Comments",
-                        "default": []
-                    },
-                    "num_comments": {
-                        "type": "integer",
-                        "title": "Num Comments",
-                        "default": 0
-                    },
-                    "video_file": {
-                        "anyOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Video File"
-                    },
-                    "video_length": {
-                        "anyOf": [
-                            {
-                                "type": "number"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
-                        "title": "Video Length"
-                    }
-                },
-                "type": "object",
-                "title": "VideoRequest"
-            },
-            "VideoScrappedFace": {
-                "properties": {
-                    "face_file": {
-                        "type": "string",
-                        "title": "Face File",
-                        "description": "The name of the file."
-                    },
-                    "frames": {
-                        "items": {
-                            "type": "string"
-                        },
-                        "type": "array",
-                        "title": "Frames",
-                        "description": "The frames the face is on."
-                    },
-                    "face_images": {
-                        "items": {
-                            "type": "string"
-                        },
-                        "type": "array",
-                        "title": "Face Images",
-                        "description": "The base64 encoded images of the faces."
-                    }
-                },
-                "type": "object",
-                "required": [
-                    "face_file",
-                    "frames",
-                    "face_images"
-                ],
-                "title": "VideoScrappedFace"
-            },
             "fastapi___compat__Body_update_infringement_preferences__1": {
                 "properties": {
                     "preferences": {
@@ -6695,10 +6605,6 @@
                         "tokenUrl": "api/client/auth/sign-in"
                     }
                 }
-            },
-            "HTTPBasic": {
-                "type": "http",
-                "scheme": "basic"
             }
         }
     }
