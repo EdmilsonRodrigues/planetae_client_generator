@@ -1,4 +1,4 @@
-from src.models.operation_generators.angular_operations_generator import (
+from models.operation_generators.angular_operations_generator import (
     AngularOperationGenerator,
 )
 

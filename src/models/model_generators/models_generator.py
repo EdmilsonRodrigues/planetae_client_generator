@@ -1,4 +1,4 @@
-from src.models.model_generators.angular_model_generator import AngularModelGenerator
+from models.model_generators.angular_model_generator import AngularModelGenerator
 
 
 class ModelGenerator:

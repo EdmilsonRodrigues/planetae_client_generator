@@ -1,5 +1,5 @@
 from typing import Any
-from src.models.model_generators.base_models_generator import BaseModelGenerator
+from models.model_generators.base_models_generator import BaseModelGenerator
 
 
 class AngularModelGenerator(BaseModelGenerator):
