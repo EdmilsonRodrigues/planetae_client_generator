@@ -25,31 +25,31 @@ export class InfringementsService {
     return this.http.get<models.CountInfringements>(`${this.apiUrl}/api/client/infringements/count`)
   }
 
-  readInfringement(infringement_id: string): Observable<models.Infringement> {
-    return this.http.get<models.Infringement>(`${this.apiUrl}/api/client/infringements/${infringement_id}`)
+  readInfringement(infringementId: string): Observable<models.Infringement> {
+    return this.http.get<models.Infringement>(`${this.apiUrl}/api/client/infringements/${{infringementId}}`)
   }
 
-  whitelistInfringement(level: models.Level, infringement_id: string): Observable<models.ActionModel> {
-    return this.http.post<models.ActionModel>(`${this.apiUrl}/api/client/infringements/${infringement_id}/whitelist/${level}`)
+  whitelistInfringement(level: models.Level, infringementId: string): Observable<models.ActionModel> {
+    return this.http.post<models.ActionModel>(`${this.apiUrl}/api/client/infringements/${{infringementId}}/whitelist/${{level}}`)
   }
 
-  unwhitelistInfringement(level: models.Level, infringement_id: string): Observable<models.ActionModel> {
-    return this.http.delete<models.ActionModel>(`${this.apiUrl}/api/client/infringements/${infringement_id}/whitelist/${level}`)
+  unwhitelistInfringement(level: models.Level, infringementId: string): Observable<models.ActionModel> {
+    return this.http.delete<models.ActionModel>(`${this.apiUrl}/api/client/infringements/${{infringementId}}/whitelist/${{level}}`)
   }
 
-  getInfringementsFrames(infringement_id: string): Observable<string[]> {
-    return this.http.get<string[]>(`${this.apiUrl}/api/client/infringements/${infringement_id}/frames`)
+  getInfringementsFrames(infringementId: string): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/api/client/infringements/${{infringementId}}/frames`)
   }
 
-  getInfringementFrame(frame_path: string, infringement_id: string): Observable<null> {
-    return this.http.get<null>(`${this.apiUrl}/api/client/infringements/${infringement_id}/frames/${frame_path}`)
+  getInfringementFrame(framePath: string, infringementId: string): Observable<null> {
+    return this.http.get<null>(`${this.apiUrl}/api/client/infringements/${{infringementId}}/frames/${{framePath}}`)
   }
 
-  takedownInfringement(infringement_id: string): Observable<models.ActionModel> {
-    return this.http.post<models.ActionModel>(`${this.apiUrl}/api/client/infringements/${infringement_id}/takedown`)
+  takedownInfringement(infringementId: string): Observable<models.ActionModel> {
+    return this.http.post<models.ActionModel>(`${this.apiUrl}/api/client/infringements/${{infringementId}}/takedown`)
   }
 
-  verifyInfringement(infringement_id: string, request: models.BodyVerifyInfringement): Observable<models.ActionModel> {
-    return this.http.post<models.ActionModel>(`${this.apiUrl}/api/client/infringements/${infringement_id}/verify`, request)
+  verifyInfringement(infringementId: string, request: models.BodyVerifyInfringement): Observable<models.ActionModel> {
+    return this.http.post<models.ActionModel>(`${this.apiUrl}/api/client/infringements/${{infringementId}}/verify`, request)
   }
 }

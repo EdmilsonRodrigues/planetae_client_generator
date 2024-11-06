@@ -21,51 +21,51 @@ export class ContentsService {
     return this.http.post<models.Content>(`${this.apiUrl}/api/client/contents/`, request)
   }
 
-  listContentByAccounid(page: number = 0, size: number = 10, sort: string = '_id', order: string = 'asc', search: string | null = '', account_id: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/api/client/contents/byteam/${account_id}?page=${page}&size=${size}&sort=${sort}&order=${order}&search=${search}`)
+  listContentByAccounid(page: number = 0, size: number = 10, sort: string = '_id', order: string = 'asc', search: string | null = '', accountId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/api/client/contents/byteam/${{accountId}}?page=${page}&size=${size}&sort=${sort}&order=${order}&search=${search}`)
   }
 
-  readContent(content_id: string): Observable<models.Content> {
-    return this.http.get<models.Content>(`${this.apiUrl}/api/client/contents/${content_id}`)
+  readContent(contentId: string): Observable<models.Content> {
+    return this.http.get<models.Content>(`${this.apiUrl}/api/client/contents/${{contentId}}`)
   }
 
-  updateContent(content_id: string, request: models.Content): Observable<models.Content> {
-    return this.http.put<models.Content>(`${this.apiUrl}/api/client/contents/${content_id}`, request)
+  updateContent(contentId: string, request: models.Content): Observable<models.Content> {
+    return this.http.put<models.Content>(`${this.apiUrl}/api/client/contents/${{contentId}}`, request)
   }
 
-  deleteContent(content_id: string): Observable<models.ActionModel> {
-    return this.http.delete<models.ActionModel>(`${this.apiUrl}/api/client/contents/${content_id}`)
+  deleteContent(contentId: string): Observable<models.ActionModel> {
+    return this.http.delete<models.ActionModel>(`${this.apiUrl}/api/client/contents/${{contentId}}`)
   }
 
-  addContentDetectionStrings(content_id: string, request: models.BodyAddContentDetectionStrings): Observable<models.Content> {
-    return this.http.post<models.Content>(`${this.apiUrl}/api/client/contents/${content_id}/detection_string`, request)
+  addContentDetectionStrings(contentId: string, request: models.BodyAddContentDetectionStrings): Observable<models.Content> {
+    return this.http.post<models.Content>(`${this.apiUrl}/api/client/contents/${{contentId}}/detection_string`, request)
   }
 
-  deleteContentDetectionStrings(detectionString: string, content_id: string): Observable<models.Content> {
-    return this.http.delete<models.Content>(`${this.apiUrl}/api/client/contents/${content_id}/detection_string/${detectionString}`)
+  deleteContentDetectionStrings(detectionString: string, contentId: string): Observable<models.Content> {
+    return this.http.delete<models.Content>(`${this.apiUrl}/api/client/contents/${{contentId}}/detection_string/${{detectionString}}`)
   }
 
-  addContentAllowedDomains(content_id: string, request: models.BodyAddContentAllowedDomains): Observable<models.Content> {
-    return this.http.post<models.Content>(`${this.apiUrl}/api/client/contents/${content_id}/allowed_domain`, request)
+  addContentAllowedDomains(contentId: string, request: models.BodyAddContentAllowedDomains): Observable<models.Content> {
+    return this.http.post<models.Content>(`${this.apiUrl}/api/client/contents/${{contentId}}/allowed_domain`, request)
   }
 
-  deleteContentAllowedDomains(allowedDomain: string, content_id: string): Observable<models.Content> {
-    return this.http.delete<models.Content>(`${this.apiUrl}/api/client/contents/${content_id}/allowed_domain/${allowedDomain}`)
+  deleteContentAllowedDomains(allowedDomain: string, contentId: string): Observable<models.Content> {
+    return this.http.delete<models.Content>(`${this.apiUrl}/api/client/contents/${{contentId}}/allowed_domain/${{allowedDomain}}`)
   }
 
-  updateInfringementPreferences(content_id: string, request: models.FastapiCompatBodyUpdateInfringementPreferences1): Observable<models.ActionModel> {
-    return this.http.patch<models.ActionModel>(`${this.apiUrl}/api/client/contents/${content_id}/infringement-preferences`, request)
+  updateInfringementPreferences(contentId: string, request: models.FastapiCompatBodyUpdateInfringementPreferences1): Observable<models.ActionModel> {
+    return this.http.patch<models.ActionModel>(`${this.apiUrl}/api/client/contents/${{contentId}}/infringement-preferences`, request)
   }
 
-  uploadContentFiles(content_id: string, request: models.BodyUploadContentFiles): Observable<models.ActionModel> {
-    return this.http.post<models.ActionModel>(`${this.apiUrl}/api/client/contents/${content_id}/files`, request)
+  uploadContentFiles(contentId: string, request: models.BodyUploadContentFiles): Observable<models.ActionModel> {
+    return this.http.post<models.ActionModel>(`${this.apiUrl}/api/client/contents/${{contentId}}/files`, request)
   }
 
-  getContentFile(content_id: string, file_name: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/api/client/contents/uploads/${content_id}/${file_name}`)
+  getContentFile(contentId: string, fileName: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/api/client/contents/uploads/${{contentId}}/${{fileName}}`)
   }
 
-  deleteFile(file_name: string, content_id: string): Observable<models.ActionModel> {
-    return this.http.delete<models.ActionModel>(`${this.apiUrl}/api/client/contents/${content_id}/files/${file_name}`)
+  deleteFile(fileName: string, contentId: string): Observable<models.ActionModel> {
+    return this.http.delete<models.ActionModel>(`${this.apiUrl}/api/client/contents/${{contentId}}/files/${{fileName}}`)
   }
 }

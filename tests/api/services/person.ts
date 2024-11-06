@@ -25,7 +25,7 @@ export class PersonService {
     return this.http.patch<models.Person>(`${this.apiUrl}/api/client/person/me/infringement-preferences`, request)
   }
 
-  readPerson(person_id: string): Observable<models.Person> {
-    return this.http.get<models.Person>(`${this.apiUrl}/api/client/person/${person_id}`)
+  readPerson(personId: string): Observable<models.Person> {
+    return this.http.get<models.Person>(`${this.apiUrl}/api/client/person/${{personId}}`)
   }
 }

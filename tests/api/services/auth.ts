@@ -30,6 +30,6 @@ export class AuthService {
   }
 
   resetPassword(username: string): Observable<models.ActionModel> {
-    return this.http.get<models.ActionModel>(`${this.apiUrl}/api/client/auth/reset-password/${username}`)
+    return this.http.get<models.ActionModel>(`${this.apiUrl}/api/client/auth/reset-password/${{username}}`)
   }
 }

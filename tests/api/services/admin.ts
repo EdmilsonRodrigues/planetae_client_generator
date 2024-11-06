@@ -21,20 +21,20 @@ export class AdminService {
     return this.http.post<models.Person>(`${this.apiUrl}/api/client/admin/persons/`, request)
   }
 
-  adminReadPerson(person_id: string): Observable<models.Person> {
-    return this.http.get<models.Person>(`${this.apiUrl}/api/client/admin/persons/${person_id}`)
+  adminReadPerson(personId: string): Observable<models.Person> {
+    return this.http.get<models.Person>(`${this.apiUrl}/api/client/admin/persons/${{personId}}`)
   }
 
-  adminUpdatePerson(person_id: string, request: models.Person): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/api/client/admin/persons/${person_id}`, request)
+  adminUpdatePerson(personId: string, request: models.Person): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/api/client/admin/persons/${{personId}}`, request)
   }
 
-  adminDeletePerson(person_id: string): Observable<models.ActionModel> {
-    return this.http.delete<models.ActionModel>(`${this.apiUrl}/api/client/admin/persons/${person_id}`)
+  adminDeletePerson(personId: string): Observable<models.ActionModel> {
+    return this.http.delete<models.ActionModel>(`${this.apiUrl}/api/client/admin/persons/${{personId}}`)
   }
 
-  adminImpersonatePerson(person_id: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/api/client/admin/persons/${person_id}/impersonate`)
+  adminImpersonatePerson(personId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/api/client/admin/persons/${{personId}}/impersonate`)
   }
 
   adminListSubscriptions(page: number = 0, size: number = 10, sort: string = '_id', order: string = 'asc', search: string | null = ''): Observable<any> {
@@ -53,16 +53,16 @@ export class AdminService {
     return this.http.put<any>(`${this.apiUrl}/api/client/admin/plan/update`, request)
   }
 
-  adminReadSubscription(subscription_id: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/api/client/admin/subscriptions/${subscription_id}`)
+  adminReadSubscription(subscriptionId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/api/client/admin/subscriptions/${{subscriptionId}}`)
   }
 
-  adminUpdateSubscription(subscription_id: string, request: models.Subscription): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/api/client/admin/subscriptions/${subscription_id}`, request)
+  adminUpdateSubscription(subscriptionId: string, request: models.Subscription): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/api/client/admin/subscriptions/${{subscriptionId}}`, request)
   }
 
-  adminDeleteSubscription(subscription_id: string): Observable<models.ActionModel> {
-    return this.http.delete<models.ActionModel>(`${this.apiUrl}/api/client/admin/subscriptions/${subscription_id}`)
+  adminDeleteSubscription(subscriptionId: string): Observable<models.ActionModel> {
+    return this.http.delete<models.ActionModel>(`${this.apiUrl}/api/client/admin/subscriptions/${{subscriptionId}}`)
   }
 
   adminListInfringements(page: number = 0, size: number = 10, sort: string = '_id', order: string = 'asc', search: string | null = ''): Observable<any> {
@@ -77,36 +77,36 @@ export class AdminService {
     return this.http.get<models.PotentialVAResponse>(`${this.apiUrl}/api/client/admin/infringements/potential`)
   }
 
-  adminReadInfringement(infringement_id: string): Observable<models.Infringement> {
-    return this.http.get<models.Infringement>(`${this.apiUrl}/api/client/admin/infringements/${infringement_id}`)
+  adminReadInfringement(infringementId: string): Observable<models.Infringement> {
+    return this.http.get<models.Infringement>(`${this.apiUrl}/api/client/admin/infringements/${{infringementId}}`)
   }
 
-  adminUpdateInfringement(infringement_id: string, request: models.Infringement): Observable<models.Infringement> {
-    return this.http.put<models.Infringement>(`${this.apiUrl}/api/client/admin/infringements/${infringement_id}`, request)
+  adminUpdateInfringement(infringementId: string, request: models.Infringement): Observable<models.Infringement> {
+    return this.http.put<models.Infringement>(`${this.apiUrl}/api/client/admin/infringements/${{infringementId}}`, request)
   }
 
-  adminDeleteInfringement(infringement_id: string): Observable<models.ActionModel> {
-    return this.http.delete<models.ActionModel>(`${this.apiUrl}/api/client/admin/infringements/${infringement_id}`)
+  adminDeleteInfringement(infringementId: string): Observable<models.ActionModel> {
+    return this.http.delete<models.ActionModel>(`${this.apiUrl}/api/client/admin/infringements/${{infringementId}}`)
   }
 
-  adminGetInfringementsFrames(infringement_id: string): Observable<string[]> {
-    return this.http.get<string[]>(`${this.apiUrl}/api/client/admin/infringements/${infringement_id}/frames`)
+  adminGetInfringementsFrames(infringementId: string): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/api/client/admin/infringements/${{infringementId}}/frames`)
   }
 
-  adminGetInfringementFrame(frame_path: string, infringement_id: string): Observable<null> {
-    return this.http.get<null>(`${this.apiUrl}/api/client/admin/infringements/${infringement_id}/frames/${frame_path}`)
+  adminGetInfringementFrame(framePath: string, infringementId: string): Observable<null> {
+    return this.http.get<null>(`${this.apiUrl}/api/client/admin/infringements/${{infringementId}}/frames/${{framePath}}`)
   }
 
-  adminTakedownInfringement(infringement_id: string): Observable<models.ActionModel> {
-    return this.http.post<models.ActionModel>(`${this.apiUrl}/api/client/admin/infringements/${infringement_id}/takedown`)
+  adminTakedownInfringement(infringementId: string): Observable<models.ActionModel> {
+    return this.http.post<models.ActionModel>(`${this.apiUrl}/api/client/admin/infringements/${{infringementId}}/takedown`)
   }
 
-  adminVerifyInfringement(infringement_id: string, request: models.BodyAdminVerifyInfringement): Observable<models.ActionModel> {
-    return this.http.post<models.ActionModel>(`${this.apiUrl}/api/client/admin/infringements/${infringement_id}/verify`, request)
+  adminVerifyInfringement(infringementId: string, request: models.BodyAdminVerifyInfringement): Observable<models.ActionModel> {
+    return this.http.post<models.ActionModel>(`${this.apiUrl}/api/client/admin/infringements/${{infringementId}}/verify`, request)
   }
 
-  adminAutomaticallyVerifyInfringement(infringement_id: string, request: models.BodyAdminAutomaticallyVerifyInfringement): Observable<models.ActionModel> {
-    return this.http.post<models.ActionModel>(`${this.apiUrl}/api/client/admin/infringements/${infringement_id}/automatic-verify`, request)
+  adminAutomaticallyVerifyInfringement(infringementId: string, request: models.BodyAdminAutomaticallyVerifyInfringement): Observable<models.ActionModel> {
+    return this.http.post<models.ActionModel>(`${this.apiUrl}/api/client/admin/infringements/${{infringementId}}/automatic-verify`, request)
   }
 
   adminListInfrastructure(page: number = 0, size: number = 10, sort: string = '_id', order: string = 'asc', search: string | null = ''): Observable<any> {
@@ -121,12 +121,12 @@ export class AdminService {
     return this.http.get<models.PendingTasks[]>(`${this.apiUrl}/api/client/admin/tasks-pending`)
   }
 
-  adminReadInfrastructure(infrastructure_id: string): Observable<models.Infrastructure> {
-    return this.http.get<models.Infrastructure>(`${this.apiUrl}/api/client/admin/infrastructure/${infrastructure_id}`)
+  adminReadInfrastructure(infrastructureId: string): Observable<models.Infrastructure> {
+    return this.http.get<models.Infrastructure>(`${this.apiUrl}/api/client/admin/infrastructure/${{infrastructureId}}`)
   }
 
-  adminDeleteInfrastructure(infrastructure_id: string): Observable<models.ActionModel> {
-    return this.http.delete<models.ActionModel>(`${this.apiUrl}/api/client/admin/infrastructure/${infrastructure_id}`)
+  adminDeleteInfrastructure(infrastructureId: string): Observable<models.ActionModel> {
+    return this.http.delete<models.ActionModel>(`${this.apiUrl}/api/client/admin/infrastructure/${{infrastructureId}}`)
   }
 
   adminListContents(page: number = 0, size: number = 10, sort: string = '_id', order: string = 'asc', search: string | null = ''): Observable<any> {
@@ -137,51 +137,51 @@ export class AdminService {
     return this.http.post<models.Content>(`${this.apiUrl}/api/client/admin/contents/`, request)
   }
 
-  adminReadContent(content_id: string): Observable<models.Content> {
-    return this.http.get<models.Content>(`${this.apiUrl}/api/client/admin/contents/${content_id}`)
+  adminReadContent(contentId: string): Observable<models.Content> {
+    return this.http.get<models.Content>(`${this.apiUrl}/api/client/admin/contents/${{contentId}}`)
   }
 
-  adminUpdateContent(content_id: string, request: models.Content): Observable<models.Content> {
-    return this.http.put<models.Content>(`${this.apiUrl}/api/client/admin/contents/${content_id}`, request)
+  adminUpdateContent(contentId: string, request: models.Content): Observable<models.Content> {
+    return this.http.put<models.Content>(`${this.apiUrl}/api/client/admin/contents/${{contentId}}`, request)
   }
 
-  adminDeleteContent(content_id: string): Observable<models.ActionModel> {
-    return this.http.delete<models.ActionModel>(`${this.apiUrl}/api/client/admin/contents/${content_id}`)
+  adminDeleteContent(contentId: string): Observable<models.ActionModel> {
+    return this.http.delete<models.ActionModel>(`${this.apiUrl}/api/client/admin/contents/${{contentId}}`)
   }
 
-  adminAddContentDetectionStrings(content_id: string, request: models.BodyAdminAddContentDetectionStrings): Observable<models.Content> {
-    return this.http.post<models.Content>(`${this.apiUrl}/api/client/admin/contents/${content_id}/detection_string`, request)
+  adminAddContentDetectionStrings(contentId: string, request: models.BodyAdminAddContentDetectionStrings): Observable<models.Content> {
+    return this.http.post<models.Content>(`${this.apiUrl}/api/client/admin/contents/${{contentId}}/detection_string`, request)
   }
 
-  adminDeleteContentDetectionStrings(detectionString: string, content_id: string): Observable<models.Content> {
-    return this.http.delete<models.Content>(`${this.apiUrl}/api/client/admin/contents/${content_id}/detection_string/${detectionString}`)
+  adminDeleteContentDetectionStrings(detectionString: string, contentId: string): Observable<models.Content> {
+    return this.http.delete<models.Content>(`${this.apiUrl}/api/client/admin/contents/${{contentId}}/detection_string/${{detectionString}}`)
   }
 
-  adminAddContentAllowedDomains(content_id: string, request: models.BodyAdminAddContentAllowedDomains): Observable<models.Content> {
-    return this.http.post<models.Content>(`${this.apiUrl}/api/client/admin/contents/${content_id}/allowed_domain`, request)
+  adminAddContentAllowedDomains(contentId: string, request: models.BodyAdminAddContentAllowedDomains): Observable<models.Content> {
+    return this.http.post<models.Content>(`${this.apiUrl}/api/client/admin/contents/${{contentId}}/allowed_domain`, request)
   }
 
-  adminDeleteContentAllowedDomains(allowedDomain: string, content_id: string): Observable<models.Content> {
-    return this.http.delete<models.Content>(`${this.apiUrl}/api/client/admin/contents/${content_id}/allowed_domain/${allowedDomain}`)
+  adminDeleteContentAllowedDomains(allowedDomain: string, contentId: string): Observable<models.Content> {
+    return this.http.delete<models.Content>(`${this.apiUrl}/api/client/admin/contents/${{contentId}}/allowed_domain/${{allowedDomain}}`)
   }
 
-  adminBatchUpdateContent(action_type: models.ActionTypes, request: string[]): Observable<models.ActionModel> {
-    return this.http.put<models.ActionModel>(`${this.apiUrl}/api/client/admin/contents/action/${action_type}`, request)
+  adminBatchUpdateContent(actionType: models.ActionTypes, request: string[]): Observable<models.ActionModel> {
+    return this.http.put<models.ActionModel>(`${this.apiUrl}/api/client/admin/contents/action/${{actionType}}`, request)
   }
 
-  adminGetContentFile(content_id: string, file_name: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/api/client/admin/contents/uploads/${content_id}/${file_name}`)
+  adminGetContentFile(contentId: string, fileName: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/api/client/admin/contents/uploads/${{contentId}}/${{fileName}}`)
   }
 
-  adminDeleteFile(file_name: string, content_id: string): Observable<models.ActionModel> {
-    return this.http.delete<models.ActionModel>(`${this.apiUrl}/api/client/admin/contents/${content_id}/files/${file_name}`)
+  adminDeleteFile(fileName: string, contentId: string): Observable<models.ActionModel> {
+    return this.http.delete<models.ActionModel>(`${this.apiUrl}/api/client/admin/contents/${{contentId}}/files/${{fileName}}`)
   }
 
-  adminUploadContentFiles(content_id: string, request: models.BodyAdminUploadContentFiles): Observable<models.ActionModel> {
-    return this.http.post<models.ActionModel>(`${this.apiUrl}/api/client/admin/contents/${content_id}/files`, request)
+  adminUploadContentFiles(contentId: string, request: models.BodyAdminUploadContentFiles): Observable<models.ActionModel> {
+    return this.http.post<models.ActionModel>(`${this.apiUrl}/api/client/admin/contents/${{contentId}}/files`, request)
   }
 
-  adminGetVideos(task_id: string | null, url: string | null, title: string | null, description: string | null, tags: string[] | null, duration: string | null, views: string | null, likes: string | null, dislikes: string | null, favorites: string | null, rating: string | null, uploader_url: string | null, uploader: string | null, uploader_verified: boolean | null, uploader_producer: boolean | null, categories: string[] | null, comments: string[] | null, num_comments: number | null, video_length: number | null, video_file: string | null, created_at: string | null, page: number = 0, size: number = 10, sort: string = '_id', order: string = 'asc', search: string | null = ''): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/api/client/admin/videos/?task_id=${task_id}&url=${url}&title=${title}&description=${description}&tags=${tags}&duration=${duration}&views=${views}&likes=${likes}&dislikes=${dislikes}&favorites=${favorites}&rating=${rating}&uploader_url=${uploader_url}&uploader=${uploader}&uploader_verified=${uploader_verified}&uploader_producer=${uploader_producer}&categories=${categories}&comments=${comments}&num_comments=${num_comments}&video_length=${video_length}&video_file=${video_file}&created_at=${created_at}&page=${page}&size=${size}&sort=${sort}&order=${order}&search=${search}`)
+  adminGetVideos(taskId: string | null, url: string | null, title: string | null, description: string | null, tags: string[] | null, duration: string | null, views: string | null, likes: string | null, dislikes: string | null, favorites: string | null, rating: string | null, uploaderUrl: string | null, uploader: string | null, uploaderVerified: boolean | null, uploaderProducer: boolean | null, categories: string[] | null, comments: string[] | null, numComments: number | null, videoLength: number | null, videoFile: string | null, createdAt: string | null, page: number = 0, size: number = 10, sort: string = '_id', order: string = 'asc', search: string | null = ''): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/api/client/admin/videos/?taskId=${taskId}&url=${url}&title=${title}&description=${description}&tags=${tags}&duration=${duration}&views=${views}&likes=${likes}&dislikes=${dislikes}&favorites=${favorites}&rating=${rating}&uploaderUrl=${uploaderUrl}&uploader=${uploader}&uploaderVerified=${uploaderVerified}&uploaderProducer=${uploaderProducer}&categories=${categories}&comments=${comments}&numComments=${numComments}&videoLength=${videoLength}&videoFile=${videoFile}&createdAt=${createdAt}&page=${page}&size=${size}&sort=${sort}&order=${order}&search=${search}`)
   }
 }
