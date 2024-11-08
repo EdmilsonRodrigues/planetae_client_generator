@@ -153,7 +153,13 @@ dmypy.json
 cython_debug/
 ../tests/
 tests/
+../example_right.json
+../example.json
+../example.ts
 
+example_right.json
+example.json
+example.ts
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
 #  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
