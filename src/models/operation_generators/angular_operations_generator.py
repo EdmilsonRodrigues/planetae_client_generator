@@ -33,16 +33,22 @@ class AngularOperationGenerator(BaseOperationGenerator):
             f"""
 {cls.tab}{name} ({parameters}): Observable<{responses}>"""
             + " {\n"
-        )            
+        )
+
+        func += f"{cls.tab}{cls.tab}const params = new HttpParams()\n"
+        for query, variable, question_mark in parameters.get_queries():
+
+            func += f"{cls.tab}{cls.tab}.set('{query}', {variable}{"?" if question_mark else ""}.toString())\n"
+
+        func += "\n"
+
         func += f"{cls.tab}{cls.tab}return this.http.{method}<{responses}>\
-(`${{this.apiUrl}}{cls.format_path(path=path)}?{parameters.get_queries()}`)"
-        if func[-3] == "?":
-            func = func[:-3] + "`)"
+(`${{this.apiUrl}}{cls.format_path(path=path)}`, {{ params }})"
         if "request: " in str(parameters):
             func = func[:-1] + ", " + "request" + ")"
         func += "\n" + cls.tab + "}\n"
         return func
-    
+
     @classmethod
     def format_path(cls, path: str) -> str:
         parameters_re = r"{\w+}"

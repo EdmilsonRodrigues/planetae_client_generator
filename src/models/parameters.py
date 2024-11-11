@@ -1,3 +1,4 @@
+from typing import Generator
 from models.model_generators.base_models_generator import BaseModelGenerator
 
 
@@ -19,13 +20,14 @@ class Parameters:
         self.request_body = request_body
         self.responses = responses
 
-    def get_queries(self) -> str:
-        queries = [
-            f"{self.get_parameter_string(query, no_default=True, only_name=True)}=$\
-{{{self.get_parameter_string(query, no_default=True, only_name=True)}}}"
-            for query in self.query_parameters
-        ]
-        return "&".join(queries)
+    def get_queries(self) -> Generator[tuple[str, str, bool], None, None]:
+        for query in self.query_parameters:
+            var = self.get_parameter_string(query, no_default=True)
+            question_mark = False
+            if "null" in var.split(':')[1]:
+                question_mark = True
+            var = self.get_parameter_string(query, no_default=True, only_name=True)
+            yield (var, var, question_mark)
 
     def get_parameters_str(self):
         string = ""
@@ -63,7 +65,9 @@ class Parameters:
         except KeyError:
             return "null"
         try:
-            return "models." + BaseModelGenerator.format_name(schema["$ref"].split("/")[-1])
+            return "models." + BaseModelGenerator.format_name(
+                schema["$ref"].split("/")[-1]
+            )
         except KeyError:
             return self.get_parameter_type(schema)
 
@@ -72,8 +76,12 @@ class Parameters:
         try:
             multipart = schema.get("multipart/form-data", None)
             if multipart is not None:
-                return "request: " + "models." + BaseModelGenerator.format_name(
-                    multipart["schema"]["$ref"].split("/")[-1]
+                return (
+                    "request: "
+                    + "models."
+                    + BaseModelGenerator.format_name(
+                        multipart["schema"]["$ref"].split("/")[-1]
+                    )
                 )
             type = cls.get_request_body_type(schema["application/json"]["schema"])
             name = "request"
@@ -81,8 +89,12 @@ class Parameters:
         except KeyError:
             form = schema.get("application/x-www-form-urlencoded", None)
             if form is not None:
-                string = "request: " + "models." + BaseModelGenerator.format_name(
-                    form["schema"]["$ref"].split("/")[-1]
+                string = (
+                    "request: "
+                    + "models."
+                    + BaseModelGenerator.format_name(
+                        form["schema"]["$ref"].split("/")[-1]
+                    )
                 )
             else:
                 print(schema)
@@ -103,7 +115,9 @@ class Parameters:
                 elif schema == {}:
                     type = "any"
                 elif ref is not None:
-                    type = "models." + BaseModelGenerator.format_name(ref.split("/")[-1])
+                    type = "models." + BaseModelGenerator.format_name(
+                        ref.split("/")[-1]
+                    )
                 else:
                     raise NotImplementedError(schema)
             case "integer" | "number":
@@ -174,5 +188,3 @@ class Parameters:
         else:
             string = ""
         return string
-
-
