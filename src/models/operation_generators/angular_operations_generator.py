@@ -45,7 +45,7 @@ class AngularOperationGenerator(BaseOperationGenerator):
         func += f"{cls.tab}{cls.tab}return this.http.{method}<{responses}>\
 (`${{this.apiUrl}}{cls.format_path(path=path)}`, {{ params }})"
         if "request: " in str(parameters):
-            func = func[:-15] + ", " + "request" + func[-15:]
+            func = func[:-13] + ", " + "request" + func[-13:]
         func += "\n" + cls.tab + "}\n"
         return func
 
