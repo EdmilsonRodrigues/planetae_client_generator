@@ -37,8 +37,11 @@ class AngularOperationGenerator(BaseOperationGenerator):
 
         func += f"{cls.tab}{cls.tab}const params = new HttpParams()\n"
         for query, variable, question_mark in parameters.get_queries():
-
-            func += f"{cls.tab}{cls.tab}{cls.tab}.set('{query}', {variable}{"?" if question_mark else ""}.toString())\n"
+            if question_mark:
+                func += f"{cls.tab}{cls.tab}if ({variable} !== null) " + "{\n" + cls.tab
+            func += f"{cls.tab}{cls.tab}params.set('{query}', {variable}.toString())\n"
+            if question_mark:
+                func += cls.tab + cls.tab + "}\n"
 
         func += "\n"
 
