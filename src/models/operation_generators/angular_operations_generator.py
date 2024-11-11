@@ -45,7 +45,7 @@ class AngularOperationGenerator(BaseOperationGenerator):
         func += f"{cls.tab}{cls.tab}return this.http.{method}<{responses}>\
 (`${{this.apiUrl}}{cls.format_path(path=path)}`, {{ params }})"
         if "request: " in str(parameters):
-            func = func[:-1] + ", " + "request" + ")"
+            func = func[:-15] + ", " + "request" + func[-15:]
         func += "\n" + cls.tab + "}\n"
         return func
 
@@ -75,7 +75,7 @@ class AngularOperationGenerator(BaseOperationGenerator):
 
     @classmethod
     def generate_operation(cls, name: str, schema: dict[str, Any]) -> str:
-        content = """
+        content = """\
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { environment } from '@env/environment'
 import { Injectable } from '@angular/core'
@@ -86,7 +86,7 @@ import * as models from '../models'
   providedIn: 'root'
 })
 """
-        content += f"export class {name.title()}Service" + " {\n"
+        content += f"export class {name.replace("-", " ").replace("_", " ").title().replace(" ", "")}Service" + " {\n"
         content += "  private apiUrl = `${environment.APIHost}`\n\n"
         content += "  constructor (private http: HttpClient) { }\n"
         content += cls.generate_functions(schema=schema)
